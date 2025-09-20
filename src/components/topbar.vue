@@ -15,9 +15,8 @@
         />
       </form>
       <div class="flex justify-between items-center gap-5">
-        <button claflex justify-between items-center gap-5ss="text-gray-500 hover:text-gray-700">
-          <font-awesome-icon icon="bell" class="text-blue-500 hover:text-red-500 animate-bounce" />
-        </button>
+        <!-- Notifications -->
+        <Notifications :notifications="notifications" @clear="clearNotifications" />
         <p>Hamza Albaghdady</p>
         <img :src="pic" alt="User" class="w-8 h-8 rounded-full border" />
       </div>
@@ -27,4 +26,18 @@
 
 <script setup>
 import pic from '@/assets/images/admin.jpg'
+import Notifications from '@/components/Notifications.vue'
+import { ref } from 'vue'
+
+const notifications = ref([
+  'New emergency requested',
+  'Ambulance 548 is available now',
+  'System maintenance scheduled',
+  'New emergency requested',
+  'New emergency requested',
+])
+
+function clearNotifications() {
+  notifications.value = []
+}
 </script>
