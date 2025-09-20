@@ -7,29 +7,37 @@
       <h3 class="text-gray-600">Monitor and manage all resources</h3>
     </div>
     <!-- Stats Cards -->
-    <div class="grid grid-cols-3 gap-4 mb-6">
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
+    <div class="grid grid-cols-4 gap-2 mb-3">
+      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
         <div>
-          <h3 class="text-sm text-gray-500">New Requests</h3>
+          <h3 class="text-sm text-gray-500">Active Emergencies</h3>
           <p class="text-2xl font-bold">12</p>
         </div>
-        <span class="text-2xl"><font-awesome-icon icon="plus" class="mr-1" /></span>
+        <font-awesome-icon icon="exclamation-triangle" class="text-2xl text-green-500" />
       </div>
 
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
+      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
         <div>
-          <h3 class="text-sm text-gray-500">Active Requests</h3>
+          <h3 class="text-sm text-gray-500">Pending Emergencies</h3>
           <p class="text-2xl font-bold">8</p>
         </div>
-        <span class="text-2xl">⏱</span>
+        <font-awesome-icon icon="exclamation-triangle" class="text-2xl text-red-500" />
       </div>
 
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
+      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
         <div>
-          <h3 class="text-sm text-gray-500">Completed Today</h3>
-          <p class="text-2xl font-bold">24</p>
+          <h3 class="text-sm text-gray-500">Assigned Ambulances</h3>
+          <p class="text-2xl font-bold">15</p>
         </div>
-        <span class="text-2xl">✔</span>
+        <font-awesome-icon icon="ambulance" class="text-2xl text-red-500" />
+      </div>
+
+      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
+        <div>
+          <h3 class="text-sm text-gray-500">Avilable Ambulances</h3>
+          <p class="text-2xl font-bold">0</p>
+        </div>
+        <font-awesome-icon icon="ambulance" class="text-2xl text-green-500" />
       </div>
     </div>
 

@@ -60,10 +60,12 @@ import {
   faFileCsv,
   faFire,
   faKitMedical,
-  faLifeRing,
-  faRecordVinyl,
   faListAlt,
-  faList,
+  faSearch,
+  faDatabase,
+  faHourglass2,
+  faCheckDouble,
+  faFlagCheckered,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add to library
@@ -118,6 +120,11 @@ library.add(
   faFire,
   faKitMedical,
   faListAlt,
+  faSearch,
+  faDatabase,
+  faCheckCircle,
+  faHourglass2,
+  faFlagCheckered,
 )
 
 const app = createApp(App)

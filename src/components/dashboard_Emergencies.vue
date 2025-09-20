@@ -25,7 +25,9 @@ import Table from '@/components/Emergencies_table.vue'
           <h3 class="text-sm text-gray-500">Total Emergencies</h3>
           <p class="text-2xl font-bold">30</p>
         </div>
-        <span class="text-2xl"><font-awesome-icon icon="plus" class="mr-1" /></span>
+        <span class="text-2xl"
+          ><font-awesome-icon icon="database" class="mr-1 text-blue-500"
+        /></span>
       </div>
 
       <div class="bg-white p-6 rounded shadow flex items-center justify-between">
@@ -33,7 +35,9 @@ import Table from '@/components/Emergencies_table.vue'
           <h3 class="text-sm text-gray-500">Pending Emergencies</h3>
           <p class="text-2xl font-bold">8</p>
         </div>
-        <span class="text-2xl">⏱</span>
+        <span class="text-2xl"
+          ><font-awesome-icon icon="hourglass-2" class="mr-1 text-red-500"
+        /></span>
       </div>
 
       <div class="bg-white p-6 rounded shadow flex items-center justify-between">
@@ -41,7 +45,9 @@ import Table from '@/components/Emergencies_table.vue'
           <h3 class="text-sm text-gray-500">Active Emergencies</h3>
           <p class="text-2xl font-bold">15</p>
         </div>
-        <span class="text-2xl">✔</span>
+        <span class="text-2xl"
+          ><font-awesome-icon icon="check-circle" class="mr-1 text-green-500"
+        /></span>
       </div>
 
       <div class="bg-white p-6 rounded shadow flex items-center justify-between">
@@ -49,7 +55,9 @@ import Table from '@/components/Emergencies_table.vue'
           <h3 class="text-sm text-gray-500">completed Emergencies</h3>
           <p class="text-2xl font-bold">15</p>
         </div>
-        <span class="text-2xl">✔</span>
+        <span class="text-2xl"
+          ><font-awesome-icon icon="flag-checkered" class="mr-1 text-blue-500"
+        /></span>
       </div>
     </div>
     <Table />

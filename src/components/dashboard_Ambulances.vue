@@ -22,7 +22,7 @@
           <h3 class="text-sm text-gray-500">Total Ambulances</h3>
           <p class="text-2xl font-bold">35</p>
         </div>
-        <span class="text-2xl">➕</span>
+        <font-awesome-icon icon="ambulance" class="text-xl text-red-500" />
       </div>
 
       <div class="bg-white p-6 rounded shadow flex items-center justify-between">

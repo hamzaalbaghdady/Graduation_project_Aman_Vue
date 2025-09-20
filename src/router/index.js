@@ -27,10 +27,13 @@ import AddPermission from '@/components/Add_permission.vue'
 import EditRole from '@/components/Edit_role.vue'
 import EditPermission from '@/components/Edit_permission.vue'
 
+import Drivers_Crews from '@/components/dashboard_drivers_crews.vue'
+import AddCrewMembers from '@/components/Add_crew_member.vue'
+import EditCrewMembers from '@/components/Edit_crew_member.vue'
+
 import Reports from '@/components/dashboard_reports.vue'
 import Profile from '@/components/dashboard_profile.vue'
 
-import Drivers_Crews from '@/components/dashboard_drivers_crews.vue'
 import History from '@/components/dashboard_history.vue'
 import Settings from '@/components/dashboard_settings.vue'
 import Log from '@/components/audit_log.vue'
@@ -166,6 +169,16 @@ const router = createRouter({
           path: 'drivers-crews',
           name: 'Drivers_Crews',
           component: Drivers_Crews,
+        },
+        {
+          path: 'drivers-crews/add',
+          name: 'AddCrewMembers',
+          component: AddCrewMembers,
+        },
+        {
+          path: 'drivers-crews/edit/:id',
+          name: 'EditCrewMembers',
+          component: EditCrewMembers,
         },
         {
           path: 'history',

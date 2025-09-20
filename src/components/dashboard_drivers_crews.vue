@@ -22,13 +22,13 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <input
             v-model="filters.name"
-            type="text"
+            type="Search"
             placeholder=" Search by name"
-            class="rounded border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            class="px-3 rounded border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow"
           />
           <select
             v-model="filters.role"
-            class="rounded border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            class="rounded border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow"
           >
             <option value="">All Roles</option>
             <option value="Driver">Driver</option>
@@ -36,7 +36,7 @@
           </select>
           <select
             v-model="filters.status"
-            class="rounded border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+            class="rounded border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow"
           >
             <option value="">All Status</option>
             <option value="Active">Active</option>
@@ -77,7 +77,7 @@
       <div class="bg-white shadow rounded-lg p-4">
         <h3 class="font-semibold mb-4">Members</h3>
         <Table
-          :headers="['ID', 'Name', 'Email', 'Role', 'Team', 'Status', 'Last Active']"
+          :headers="['ID', 'Name', 'Email', 'Role', 'Team', 'Status', 'Last_Active']"
           :data="members"
           :actions="['view', 'edit', 'block']"
           :perPage="4"
@@ -115,7 +115,7 @@ const members = ref([
     role: 'Driver',
     team: 'Alpha',
     status: 'On Duty',
-    lastActive: '5 mins ago',
+    last_active: '5 mins ago',
   },
   {
     id: 405699301,
@@ -124,7 +124,7 @@ const members = ref([
     role: 'Paramedic',
     team: 'Bravo',
     status: 'Active',
-    lastActive: '10 mins ago',
+    last_active: '10 mins ago',
   },
   {
     id: 405699301,
@@ -133,7 +133,7 @@ const members = ref([
     role: 'Driver',
     team: 'Delta',
     status: 'Off Duty',
-    lastActive: '1 hour ago',
+    last_active: '1 hour ago',
   },
   {
     id: 405699301,
@@ -142,7 +142,7 @@ const members = ref([
     role: 'Paramedic',
     team: 'Echo',
     status: 'Inactive',
-    lastActive: 'Yesterday',
+    last_active: 'Yesterday',
   },
 ])
 

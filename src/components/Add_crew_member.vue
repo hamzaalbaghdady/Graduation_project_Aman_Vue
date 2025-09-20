@@ -2,25 +2,25 @@
   <div class="min-h-screen bg-gray-50 p-8">
     <!-- Page Header -->
     <header class="flex justify-between items-center mb-6">
-      <h1 class="text-xl font-bold text-gray-800">Add New Dispatcher</h1>
+      <h1 class="text-xl font-bold text-gray-800">Add New Crew Member</h1>
     </header>
 
     <!-- Form Card -->
     <div class="bg-white rounded-xl shadow p-6 max-w-4xl mx-auto">
-      <h2 class="text-lg font-semibold mb-1">Add New Dispatcher</h2>
+      <h2 class="text-lg font-semibold mb-1">Add New Crew Member</h2>
       <p class="text-sm text-gray-500 mb-6">
-        Please fill in all available information about the Dispatcher
+        Please fill in all available information about the Crew Member
       </p>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
         <!-- Ambulance Info -->
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700">Dispathcer ID</label>
+            <label class="block text-sm font-medium text-gray-700">Crew Member ID</label>
             <input
               v-model="form.id"
               type="text"
-              placeholder="Enter Dispatcher National ID"
+              placeholder="Enter Crew Member National ID"
               class="mt-1 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
@@ -52,15 +52,6 @@
             />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">Initial Password</label>
-            <input
-              v-model="form.password"
-              type="password"
-              placeholder="Enter Password"
-              class="mt-1 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
             <label class="block text-sm font-medium text-gray-700">Phone Number</label>
             <input
               v-model="form.phone"
@@ -80,22 +71,18 @@
           </div>
         </div>
 
-        <!-- Ambulance crew -->
+        <!-- Role -->
         <div>
           <label class="block text-sm font-medium text-gray-700"
-            >Select Permissions <i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i
+            >Select Role <i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i
           ></label>
-          <p class="text-sm text-gray-500 mb-6">You can select more than one Permission.</p>
           <select
-            multiple
-            v-model="form.permissions"
+            v-model="form.role"
             class="mt-1 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
           >
-            <option value="emargency-managment">Emergency Managment</option>
-            <option value="ambulance-managment">Ambulance Managment</option>
-            <option value="uer-managment">User Managment</option>
-            <option value="dispatcher-managment">Dispatcher Managment</option>
-            <option value="driver-crew-managment">Driver & crew Managment</option>
+            <option value="" selected>Select Role</option>
+            <option value="Driver">Driver</option>
+            <option value="Driver">Paramedic</option>
           </select>
         </div>
 
@@ -135,31 +122,23 @@
     <div class="bg-white mt-6 p-4 rounded-xl shadow max-w-3xl mx-auto">
       <p class="text-sm text-gray-700 flex items-center">
         <span class="mr-2">ℹ️</span>
-        <strong>Quick Tips: </strong> An email will be sent to this dispatcher with initial
-        password.
+        <strong>Quick Tips: </strong> Make sure to enter all essinetial data about crew member.
       </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
-
-const currentDateTime = ref('')
-onMounted(() => {
-  const now = new Date()
-  currentDateTime.value = now.toLocaleString()
-})
+import { reactive } from 'vue'
 
 const form = reactive({
   id: '',
   fname: '',
   lname: '',
   email: '',
-  password: '',
   phone: '',
   address: '',
-  permissions: [],
+  role: '',
   notes: '',
 })
 
