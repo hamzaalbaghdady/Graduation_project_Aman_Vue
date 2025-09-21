@@ -17,7 +17,7 @@
       <div class="flex justify-between items-center gap-5">
         <!-- Notifications -->
         <Notifications :notifications="notifications" @clear="clearNotifications" />
-        <p>Hamza Albaghdady</p>
+        <UserMenu username="Hamza Albaghdady" />
         <img :src="pic" alt="User" class="w-8 h-8 rounded-full border" />
       </div>
     </div>
@@ -27,6 +27,7 @@
 <script setup>
 import pic from '@/assets/images/admin.jpg'
 import Notifications from '@/components/Notifications.vue'
+import UserMenu from '@/components/UserMenu.vue'
 import { ref } from 'vue'
 
 const notifications = ref([

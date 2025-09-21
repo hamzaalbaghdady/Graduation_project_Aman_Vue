@@ -11,10 +11,10 @@ const unactiveClass = 'flex items-center p-2 rounded hover:bg-indigo-200'
 </script>
 <template>
   <!-- Sidebar -->
-  <aside class="w-55 bg-white border-r flex flex-col">
+  <aside class="w-55 bg-white bg-gray-900 border-r flex flex-col">
     <div class="p-3 flex items-center space-x-2 border-b">
       <img :src="pic" alt="Logo" class="w-13 h-12 border rounded-full" />
-      <h1 class="text-l">Aman Emergency System</h1>
+      <h1 class="text-xl font-mono font-bold">Aman System</h1>
     </div>
     <nav class="flex-1 p-4 space-y-1 text-gray-700">
       <RouterLink to="/" :class="route.path === '/' ? activeClass : unactiveClass"

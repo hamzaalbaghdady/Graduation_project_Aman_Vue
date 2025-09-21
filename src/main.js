@@ -66,6 +66,7 @@ import {
   faHourglass2,
   faCheckDouble,
   faFlagCheckered,
+  faChevronDown,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add to library
@@ -125,6 +126,7 @@ library.add(
   faCheckCircle,
   faHourglass2,
   faFlagCheckered,
+  faChevronDown,
 )
 
 const app = createApp(App)

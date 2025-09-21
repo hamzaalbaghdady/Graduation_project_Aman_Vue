@@ -6,7 +6,15 @@
       <div>
         <h2 class="text-xl font-semibold text-gray-800">John Doe</h2>
         <p class="text-gray-500">john.doe@example.com</p>
-        <button class="text-sm text-indigo-600 hover:underline mt-1">Change Photo</button>
+        <button @click="isModal1Open = true" class="text-sm text-indigo-600 hover:underline mt-1">
+          Change Photo
+        </button>
+        <!-- Modal -->
+        <UploadPhotoModal
+          :isOpen="isModal1Open"
+          @close="isModal1Open = false"
+          @uploaded="handleUpload"
+        />
       </div>
     </div>
 
@@ -42,9 +50,18 @@
           <p class="text-gray-700">Password</p>
           <p class="text-sm text-gray-500">Last updated 3 months ago</p>
         </div>
-        <button class="px-3 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300">
+        <button
+          @click="isModal2Open = true"
+          class="px-3 py-1 text-sm bg-gray-200 rounded-lg hover:bg-gray-300"
+        >
           Change Password
         </button>
+        <!-- Modal -->
+        <ChangePasswordModal
+          :isOpen="isModal2Open"
+          @close="isModal2Open = false"
+          @passwordChanged="handlePasswordChanged"
+        />
       </div>
       <div class="flex justify-between items-center py-2">
         <div>
@@ -52,14 +69,11 @@
           <p class="text-sm text-gray-500">Add an extra layer of security</p>
         </div>
         <label class="inline-flex items-center cursor-pointer">
-          <input type="checkbox" class="sr-only peer" />
+          <input type="checkbox" v-model="auth_enabled" class="sr-only peer" />
+
           <div
-            class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-indigo-600 relative transition"
-          >
-            <span
-              class="absolute top-0.5 left-0.5 bg-white h-5 w-5 rounded-full transition peer-checked:translate-x-5"
-            ></span>
-          </div>
+            class="w-11 h-6 bg-gray-200 rounded-full relative transition-colors peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:h-5 after:w-5 after:rounded-full after:transition-transform peer-checked:after:translate-x-5"
+          ></div>
         </label>
       </div>
     </div>
@@ -69,15 +83,13 @@
       <h3 class="text-lg font-medium text-gray-800 mb-4">Appearance</h3>
       <div class="flex justify-between items-center py-2 border-b">
         <p class="text-gray-700">Dark Mode</p>
+
         <label class="inline-flex items-center cursor-pointer">
-          <input type="checkbox" class="sr-only peer" />
+          <input @click="toggleDark()" type="checkbox" v-model="dm_enabled" class="sr-only peer" />
+
           <div
-            class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 relative transition"
-          >
-            <span
-              class="absolute top-0.5 left-0.5 bg-white h-5 w-5 rounded-full transition peer-checked:translate-x-5"
-            ></span>
-          </div>
+            class="w-11 h-6 bg-gray-200 rounded-full relative transition-colors peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:h-5 after:w-5 after:rounded-full after:transition-transform peer-checked:after:translate-x-5"
+          ></div>
         </label>
       </div>
       <div class="py-3">
@@ -109,4 +121,28 @@
 
 <script setup>
 import pic from '@/assets/images/admin.jpg'
+import { ref } from 'vue'
+import UploadPhotoModal from '@/components/UploadPhotoModel.vue'
+import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
+
+const auth_enabled = ref(true)
+const dm_enabled = ref(true)
+
+const isModal1Open = ref(false)
+
+function handleUpload(file) {
+  console.log('File received in parent:', file)
+  // Upload to Laravel backend here via fetch/axios
+}
+
+const isModal2Open = ref(false)
+
+function handlePasswordChanged(data) {
+  console.log('Password changed:', data)
+
+  // 🔹 here you can call your API to update password in backend
+  // e.g. axios.post('/api/change-password', data)
+
+  alert('Password updated successfully!')
+}
 </script>
