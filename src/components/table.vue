@@ -110,7 +110,7 @@ import { ref, computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 let myRoute = useRoute().path
-if (myRoute === '/') {
+if (myRoute === '/' || myRoute === '/sos') {
   myRoute = 'emergencies'
 }
 

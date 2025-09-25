@@ -21,6 +21,7 @@ import {
   faChartBar,
   faEdit,
   faEye,
+  faEyeSlash,
   faCog,
   faPhone,
   faPeopleGroup,
@@ -67,6 +68,8 @@ import {
   faCheckDouble,
   faFlagCheckered,
   faChevronDown,
+  faCalendarCheck,
+  faCommentDots,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add to library
@@ -81,6 +84,7 @@ library.add(
   faChartBar,
   faEdit,
   faEye,
+  faEyeSlash,
   faCog,
   faPhone,
   faPeopleGroup,
@@ -127,6 +131,8 @@ library.add(
   faHourglass2,
   faFlagCheckered,
   faChevronDown,
+  faCalendarCheck,
+  faCommentDots,
 )
 
 const app = createApp(App)

@@ -17,10 +17,7 @@
         <!-- User Filter -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">User</label>
-          <select
-            v-model="filters.user"
-            class="w-full rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-          >
+          <select v-model="filters.user" class="border rounded px-3 py-2">
             <option value="all">All Users</option>
             <option v-for="user in users" :key="user" :value="user">{{ user }}</option>
           </select>
@@ -29,21 +26,13 @@
         <!-- Start Date -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-          <input
-            type="date"
-            v-model="filters.startDate"
-            class="w-full rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-          />
+          <input type="date" v-model="filters.startDate" class="border rounded px-3 py-2" />
         </div>
 
         <!-- End Date -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-          <input
-            type="date"
-            v-model="filters.endDate"
-            class="w-full rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
-          />
+          <input type="date" v-model="filters.endDate" class="border rounded px-3 py-2" />
         </div>
 
         <!-- Buttons -->

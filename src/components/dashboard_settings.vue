@@ -81,7 +81,7 @@
               type="button"
               class="ml-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200"
             >
-              <font-awesome-icon icon="eye" class="" />
+              <font-awesome-icon :icon="eyeIcon" class="" />
             </button>
           </div>
           <p class="text-xs text-gray-400 mt-1">API key for SMS service authentication</p>
@@ -149,9 +149,14 @@ const form = ref({
   smsApiKey: 'SMS154f5fg2d8f2158e2d8es315e5',
 })
 const type = ref('password')
+let eyeIcon = ref('eye')
 const viewPassword = () => {
-  console.log('clicked')
-  if (type.value === 'password') type.value = 'text'
-  else if (type.value === 'text') type.value = 'password'
+  if (type.value === 'password') {
+    type.value = 'text'
+    eyeIcon = 'eye-slash'
+  } else if (type.value === 'text') {
+    type.value = 'password'
+    eyeIcon = 'eye'
+  }
 }
 </script>
