@@ -15,6 +15,8 @@ import Emergencies from '@/components/dashboard_Emergencies.vue'
 import AddEmergency from '@/components/Add_emergency.vue'
 import ViewEmergency from '@/components/View_emergency.vue'
 import EditEmergency from '@/components/Edit_emergency.vue'
+import AddEmergencyType from '@/components/Add_emergency_type.vue'
+import EditEmergencyType from '@/components/Edit_emergency_type.vue'
 
 import Dispatchers from '@/components/dashboard_dispatchers.vue'
 import ViewDispatchers from '@/components/View_dispatcher.vue'
@@ -106,6 +108,16 @@ const router = createRouter({
           path: 'emergencies/edit/:id',
           name: 'EditEmergency',
           component: EditEmergency,
+        },
+        {
+          path: 'emergencies/types/add',
+          name: 'AddEmergencyType',
+          component: AddEmergencyType,
+        },
+        {
+          path: 'emergencies/types/edit/:id',
+          name: 'EditEmergencyType',
+          component: EditEmergencyType,
         },
         // #Dispatchers
         {

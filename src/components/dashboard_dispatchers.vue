@@ -67,7 +67,7 @@ const dispatchers = ref([
     gender: 'male',
     address: 'Gaza, Alnosirate, Block 1',
     permissions: 'default',
-    status: 'Unactive',
+    status: 'Inactive',
   },
   {
     id: '960135824',
@@ -107,7 +107,7 @@ const dispatchers = ref([
     gender: 'male',
     address: 'Gaza, Alnosirate, Block 1',
     permissions: 'default',
-    status: 'Unactive',
+    status: 'Inactive',
   },
   {
     id: '960135824',
@@ -143,17 +143,6 @@ const dispatchers = ref([
   },
 ])
 
-const statusClass = (status) => {
-  switch (status) {
-    case 'Active':
-      return 'bg-green-100 text-gray-600'
-    case 'Unactive':
-      return 'bg-red-100 text-blue-600'
-
-    default:
-      return 'bg-gray-100 text-gray-600'
-  }
-}
 function handleDelete(row) {
   console.log('Delete this user:', row)
   // Call Laravel API here

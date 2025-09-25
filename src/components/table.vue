@@ -29,7 +29,11 @@
           <td
             v-for="(header, colIndex) in headers"
             :key="colIndex"
-            class="px-4 py-2 text-sm text-gray-600 border-b"
+            :class="
+              header.toLowerCase() === 'status'
+                ? statusClass(row[header.toLowerCase()])
+                : 'px-4 py-2 text-sm text-gray-600 border-b'
+            "
           >
             {{ row[header.toLowerCase()] }}
           </td>
@@ -44,7 +48,10 @@
                 <font-awesome-icon icon="eye" class="text-xl text-green-500 hover:text-green-800" />
               </router-link>
 
-              <router-link v-else-if="action === 'edit'" :to="`${myRoute}/edit/${row.id}`">
+              <router-link
+                v-else-if="action === 'edit'"
+                :to="link !== '' ? link + row.id : `${myRoute}/${row.id}`"
+              >
                 <font-awesome-icon icon="edit" class="text-xl text-blue-500 hover:text-blue-800" />
               </router-link>
 
@@ -119,6 +126,7 @@ const props = defineProps({
   data: { type: Array, required: true },
   perPage: { type: Number, default: 5 },
   actions: { type: Array, default: () => [] }, // ['view', 'edit', 'delete', 'block']
+  link: { type: String, required: false, default: '' },
 })
 
 const currentPage = ref(1)
@@ -140,5 +148,48 @@ function nextPage() {
 }
 function prevPage() {
   if (currentPage.value > 1) currentPage.value--
+}
+
+// Test
+const statusClass = (status) => {
+  switch (status) {
+    case 'Pending':
+      return 'px-4 py-2 text-sm text-yellow-400 border-b'
+    case 'Fuel':
+      return 'px-4 py-2 text-sm text-yellow-400 border-b'
+    case 'Off Duty':
+      return 'px-4 py-2 text-sm text-yellow-400 border-b'
+    case 'Assigned':
+      return 'px-4 py-2 text-sm text-blue-600 border-b'
+    case 'On Duty':
+      return 'px-4 py-2 text-sm text-blue-600 border-b'
+    case 'Completed':
+      return 'px-4 py-2 text-sm text-green-600 border-b'
+    case 'Free':
+      return 'px-4 py-2 text-sm text-green-600 border-b'
+    case 'Active':
+      return 'px-4 py-2 text-sm text-green-600 border-b'
+    case 'Canceled':
+      return 'px-4 py-2 text-sm text-red-600 border-b'
+    case 'Inactive':
+      return 'px-4 py-2 text-sm text-red-600 border-b'
+    case 'Blocked':
+      return 'px-4 py-2 text-sm text-red-600 border-b'
+    default:
+      return 'px-4 py-2 text-sm text-gray-600 border-b'
+  }
+}
+
+const priorityClass = (priority) => {
+  switch (priority) {
+    case 'High':
+      return 'bg-red-100 text-gray-600'
+    case 'medium':
+      return 'bg-blue-100 text-blue-600'
+    case 'Low':
+      return 'bg-green-100 text-green-600'
+    default:
+      return 'bg-gray-100 text-gray-600'
+  }
 }
 </script>

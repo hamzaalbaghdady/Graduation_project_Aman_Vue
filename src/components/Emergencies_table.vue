@@ -3,7 +3,16 @@
   <div class="bg-white rounded shadow">
     <div class="p-4 border-b font-bold">Live SOS Requests</div>
     <Table
-      :headers="['ID', 'Civilian_id', 'Time', 'Location', 'status', 'Priority']"
+      :headers="[
+        'ID',
+        'Civilian_id',
+        'Time',
+        'Location',
+        'Type',
+        'Dispatcher',
+        'status',
+        'Priority',
+      ]"
       :data="emergencies"
       :actions="['view', 'edit']"
       :perPage="5"
@@ -21,6 +30,8 @@ const emergencies = ref([
     civilian_id: '453258698',
     time: '2 min ago',
     location: '123 Main St, Downtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -29,6 +40,8 @@ const emergencies = ref([
     civilian_id: '256987452',
     time: '10 min ago',
     location: '456 Oak Ave, Midtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -37,6 +50,8 @@ const emergencies = ref([
     civilian_id: '453258698',
     time: '2 min ago',
     location: '123 Main St, Downtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -45,6 +60,8 @@ const emergencies = ref([
     civilian_id: '256987452',
     time: '10 min ago',
     location: '456 Oak Ave, Midtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -53,6 +70,8 @@ const emergencies = ref([
     civilian_id: '952876528',
     time: '5 min ago',
     location: '789 Pine Rd, Uptown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Pending',
     priority: 'medium',
   },
@@ -61,6 +80,8 @@ const emergencies = ref([
     civilian_id: '952876528',
     time: '5 min ago',
     location: '789 Pine Rd, Uptown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Pending',
     priority: 'medium',
   },
@@ -69,6 +90,8 @@ const emergencies = ref([
     civilian_id: '936528741',
     time: '7 min ago',
     location: '321 Elm St, Eastside',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Completed',
     priority: 'Low',
   },
@@ -77,6 +100,8 @@ const emergencies = ref([
     civilian_id: '952876528',
     time: '5 min ago',
     location: '789 Pine Rd, Uptown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Pending',
     priority: 'medium',
   },
@@ -85,6 +110,8 @@ const emergencies = ref([
     civilian_id: '936528741',
     time: '7 min ago',
     location: '321 Elm St, Eastside',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Completed',
     priority: 'Low',
   },
@@ -93,6 +120,8 @@ const emergencies = ref([
     civilian_id: '865932547',
     time: '20 min ago',
     location: '654 Cedar Blvd, Westside',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Canceled',
     priority: 'Low',
   },
@@ -101,6 +130,8 @@ const emergencies = ref([
     civilian_id: '453258698',
     time: '2 min ago',
     location: '123 Main St, Downtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -109,6 +140,8 @@ const emergencies = ref([
     civilian_id: '256987452',
     time: '10 min ago',
     location: '456 Oak Ave, Midtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -117,6 +150,8 @@ const emergencies = ref([
     civilian_id: '453258698',
     time: '2 min ago',
     location: '123 Main St, Downtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -125,6 +160,8 @@ const emergencies = ref([
     civilian_id: '256987452',
     time: '10 min ago',
     location: '456 Oak Ave, Midtown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Assigned',
     priority: 'High',
   },
@@ -133,6 +170,8 @@ const emergencies = ref([
     civilian_id: '952876528',
     time: '5 min ago',
     location: '789 Pine Rd, Uptown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Pending',
     priority: 'medium',
   },
@@ -141,6 +180,8 @@ const emergencies = ref([
     civilian_id: '952876528',
     time: '5 min ago',
     location: '789 Pine Rd, Uptown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Pending',
     priority: 'medium',
   },
@@ -149,6 +190,8 @@ const emergencies = ref([
     civilian_id: '936528741',
     time: '7 min ago',
     location: '321 Elm St, Eastside',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Completed',
     priority: 'Low',
   },
@@ -157,6 +200,8 @@ const emergencies = ref([
     civilian_id: '952876528',
     time: '5 min ago',
     location: '789 Pine Rd, Uptown',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Pending',
     priority: 'medium',
   },
@@ -165,6 +210,8 @@ const emergencies = ref([
     civilian_id: '936528741',
     time: '7 min ago',
     location: '321 Elm St, Eastside',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Completed',
     priority: 'Low',
   },
@@ -173,36 +220,10 @@ const emergencies = ref([
     civilian_id: '865932547',
     time: '20 min ago',
     location: '654 Cedar Blvd, Westside',
+    type: 'Fire',
+    dispatcher: 'John Doo',
     status: 'Canceled',
     priority: 'Low',
   },
 ])
-
-const statusClass = (status) => {
-  switch (status) {
-    case 'Pending':
-      return 'bg-gray-100 text-gray-600'
-    case 'Assigned':
-      return 'bg-blue-100 text-blue-600'
-    case 'Completed':
-      return 'bg-green-100 text-green-600'
-    case 'canceld':
-      return 'bg-red-100 text-red-600'
-    default:
-      return 'bg-gray-100 text-gray-600'
-  }
-}
-
-const priorityClass = (priority) => {
-  switch (priority) {
-    case 'High':
-      return 'bg-red-100 text-gray-600'
-    case 'medium':
-      return 'bg-blue-100 text-blue-600'
-    case 'Low':
-      return 'bg-green-100 text-green-600'
-    default:
-      return 'bg-gray-100 text-gray-600'
-  }
-}
 </script>
