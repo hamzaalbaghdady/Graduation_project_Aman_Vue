@@ -41,7 +41,7 @@ const unactiveClass = 'flex items-center p-2 rounded hover:bg-indigo-200'
       <RouterLink
         to="/drivers-crews"
         :class="isActiveLink('/drivers-crews') ? activeClass : unactiveClass"
-        ><font-awesome-icon icon="people-group" class="mr-3" />Drivers & Crews</RouterLink
+        ><font-awesome-icon icon="people-group" class="mr-3" />Ambulance Staff</RouterLink
       >
       <RouterLink
         to="/roles-permissions"

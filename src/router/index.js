@@ -31,7 +31,10 @@ import EditPermission from '@/components/Edit_permission.vue'
 
 import Drivers_Crews from '@/components/dashboard_drivers_crews.vue'
 import AddCrewMembers from '@/components/Add_crew_member.vue'
+import AddCrews from '@/components/Add_crews.vue'
 import EditCrewMembers from '@/components/Edit_crew_member.vue'
+import EditCrews from '@/components/Edit_crews.vue'
+import ViewAmbulanceStaff from '@/components/View_ambulance_staff.vue'
 
 import Reports from '@/components/dashboard_reports.vue'
 import Profile from '@/components/dashboard_profile.vue'
@@ -177,20 +180,36 @@ const router = createRouter({
           component: Profile,
         },
 
+        // Drivers & crews
         {
           path: 'drivers-crews',
           name: 'Drivers_Crews',
           component: Drivers_Crews,
         },
         {
-          path: 'drivers-crews/add',
+          path: 'drivers-crews/members/add',
           name: 'AddCrewMembers',
           component: AddCrewMembers,
         },
         {
-          path: 'drivers-crews/edit/:id',
+          path: 'drivers-crews/crews/add',
+          name: 'AddCrews',
+          component: AddCrews,
+        },
+        {
+          path: 'drivers-crews/members/edit/:id',
           name: 'EditCrewMembers',
           component: EditCrewMembers,
+        },
+        {
+          path: 'drivers-crews/crews/edit/:id',
+          name: 'EditCrews',
+          component: EditCrews,
+        },
+        {
+          path: 'drivers-crews/:id',
+          name: 'ViewAmbulanceStaff',
+          component: ViewAmbulanceStaff,
         },
         {
           path: 'history',

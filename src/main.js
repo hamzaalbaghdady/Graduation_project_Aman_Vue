@@ -9,6 +9,9 @@ import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
+// Sweetalert2 css
+import 'sweetalert2/dist/sweetalert2.min.css'
+
 // Import specific icons
 import {
   faUser,
@@ -65,7 +68,6 @@ import {
   faSearch,
   faDatabase,
   faHourglass2,
-  faCheckDouble,
   faFlagCheckered,
   faChevronDown,
   faCalendarCheck,
