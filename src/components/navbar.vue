@@ -60,9 +60,6 @@ const unactiveClass = 'flex items-center p-2 rounded hover:bg-indigo-200'
       <RouterLink to="/log" :class="isActiveLink('/log') ? activeClass : unactiveClass"
         ><font-awesome-icon icon="list-alt" class="mr-3" /> System log</RouterLink
       >
-      <RouterLink to="/sos" :class="isActiveLink('/sos') ? activeClass : unactiveClass"
-        ><font-awesome-icon icon="eye" class="mr-3" /> SOS Monitoring</RouterLink
-      >
       <RouterLink to="/settings" :class="isActiveLink('/settings') ? activeClass : unactiveClass"
         ><font-awesome-icon icon="cog" class="mr-3" />Settings</RouterLink
       >

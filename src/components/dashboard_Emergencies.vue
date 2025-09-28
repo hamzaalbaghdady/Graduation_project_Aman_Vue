@@ -2,6 +2,10 @@
 import ETable from '@/components/Emergencies_table.vue'
 import Table from '@/components/table.vue'
 import { ref, computed } from 'vue'
+import { useAlert } from '@/composables/useAlert'
+import Card from '@/components/Card.vue'
+
+const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
 const emergencyTypes = [
   // Critical & Life-Threatening (Highest Priority)
@@ -163,6 +167,13 @@ const emergencyTypes = [
   },
 ]
 
+const stats = ref({
+  total: 758,
+  pending: 17,
+  active: 18,
+  completed: 723,
+})
+
 const dispatchers = ['Sarah Johnson', 'Mike Chen', 'Lisa Rodriguez']
 const locations = ['Downtown District', 'North Zone', 'East Sector']
 const incidentTypes = emergencyTypes.map((emergency) => emergency.type)
@@ -182,9 +193,21 @@ const filteredRequests = computed(() => {
     )
   })
 })
+
 function handleDelete(row) {
-  console.log('Delete this user:', row)
-  // Call Laravel API here
+  confirmDialog(
+    'Are you sure you want to delete "' + row.type + '"?',
+    "You won't be able to undo this!",
+  ).then((result) => {
+    if (result.isConfirmed) {
+      // Call Laravel API here
+      if (true) {
+        successAlert('Deleted!', 'Your item has been deleted.')
+      } else {
+        errorAlert('Failed!', 'Your item has Not been deleted.')
+      }
+    }
+  })
 }
 </script>
 <template>
@@ -205,46 +228,35 @@ function handleDelete(row) {
       </div>
     </div>
     <!-- Stats Cards -->
-    <div class="grid grid-cols-4 gap-4 mb-6">
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Total Emergencies</h3>
-          <p class="text-2xl font-bold">30</p>
-        </div>
-        <span class="text-2xl"
-          ><font-awesome-icon icon="database" class="mr-1 text-blue-500"
-        /></span>
-      </div>
-
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Pending Emergencies</h3>
-          <p class="text-2xl font-bold">8</p>
-        </div>
-        <span class="text-2xl"
-          ><font-awesome-icon icon="hourglass-2" class="mr-1 text-red-500"
-        /></span>
-      </div>
-
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Active Emergencies</h3>
-          <p class="text-2xl font-bold">15</p>
-        </div>
-        <span class="text-2xl"
-          ><font-awesome-icon icon="check-circle" class="mr-1 text-green-500"
-        /></span>
-      </div>
-
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">completed Emergencies</h3>
-          <p class="text-2xl font-bold">15</p>
-        </div>
-        <span class="text-2xl"
-          ><font-awesome-icon icon="flag-checkered" class="mr-1 text-blue-500"
-        /></span>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <Card
+        :title="`Total Emergencies`"
+        :count="stats.total"
+        :icon="`database`"
+        :bg_color="`blue`"
+        :icon_color="`blue`"
+      />
+      <Card
+        :title="`Pending Emergencies`"
+        :count="stats.pending"
+        :icon="`hourglass-2`"
+        :bg_color="`red`"
+        :icon_color="`red`"
+      />
+      <Card
+        :title="`Active Emergencie`"
+        :count="stats.active"
+        :icon="`check-circle`"
+        :bg_color="`yellow`"
+        :icon_color="`green`"
+      />
+      <Card
+        :title="`completed Emergencies`"
+        :count="stats.completed"
+        :icon="`flag-checkered`"
+        :bg_color="`green`"
+        :icon_color="`blue`"
+      />
     </div>
 
     <!-- Filters -->

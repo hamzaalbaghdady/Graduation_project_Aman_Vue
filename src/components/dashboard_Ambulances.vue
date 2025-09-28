@@ -15,31 +15,29 @@
         >
       </div>
     </div>
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-3 gap-4 mb-6">
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Total Ambulances</h3>
-          <p class="text-2xl font-bold">35</p>
-        </div>
-        <font-awesome-icon icon="ambulance" class="text-xl text-red-500" />
-      </div>
-
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Availabel Ambulances</h3>
-          <p class="text-2xl font-bold">8</p>
-        </div>
-        <span class="text-2xl">⏱</span>
-      </div>
-
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Assigned Ambulances</h3>
-          <p class="text-2xl font-bold">15</p>
-        </div>
-        <span class="text-2xl">✔</span>
-      </div>
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <Card
+        :title="`Total Ambulances`"
+        :count="stats.total"
+        :icon="`ambulance`"
+        :bg_color="`blue`"
+        :icon_color="`blue`"
+      />
+      <Card
+        :title="`Availabel Ambulances`"
+        :count="stats.availabel"
+        :icon="`ambulance`"
+        :bg_color="`blue`"
+        :icon_color="`green`"
+      />
+      <Card
+        :title="`Assigned Ambulances`"
+        :count="stats.assigned"
+        :icon="`ambulance`"
+        :bg_color="`blue`"
+        :icon_color="`red`"
+      />
     </div>
 
     <!-- Table -->
@@ -59,6 +57,10 @@
 <script setup>
 import { ref } from 'vue'
 import Table from '@/components/table.vue'
+import { useAlert } from '@/composables/useAlert'
+import Card from '@/components/Card.vue'
+
+const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
 const amblunces = ref([
   {
@@ -98,23 +100,25 @@ const amblunces = ref([
   },
 ])
 
-const statusClass = (status) => {
-  switch (status) {
-    case 'Fuel':
-      return 'bg-gray-100 text-gray-600'
-    case 'Assigned':
-      return 'bg-blue-100 text-blue-600'
-    case 'Free':
-      return 'bg-green-100 text-green-600'
-    case 'Fix':
-      return 'bg-red-100 text-red-600'
-    default:
-      return 'bg-gray-100 text-gray-600'
-  }
-}
+const stats = ref({
+  total: 35,
+  availabel: 17,
+  assigned: 18,
+})
 
 function handleDelete(row) {
-  console.log('Delete this user:', row)
-  // Call Laravel API here
+  confirmDialog(
+    'Are you sure you want to delete ambulance #' + row.id + '?',
+    "You won't be able to undo this!",
+  ).then((result) => {
+    if (result.isConfirmed) {
+      // Call Laravel API here
+      if (true) {
+        successAlert('Deleted!', 'Your item has been deleted.')
+      } else {
+        errorAlert('Failed!', 'Your item has Not been deleted.')
+      }
+    }
+  })
 }
 </script>

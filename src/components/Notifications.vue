@@ -5,7 +5,10 @@
       @click="toggle"
       class="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 relative"
     >
-      <font-awesome-icon icon="bell" class="text-xl text-blue-500 hover:text-blue-800" />
+      <font-awesome-icon
+        icon="bell"
+        class="text-xl text-blue-500 hover:text-blue-800 animate-bounce"
+      />
       <span
         v-if="notifications.length"
         class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full"

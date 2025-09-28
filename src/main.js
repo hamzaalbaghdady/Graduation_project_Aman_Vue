@@ -72,6 +72,8 @@ import {
   faChevronDown,
   faCalendarCheck,
   faCommentDots,
+  faUserDoctor,
+  faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add to library
@@ -135,6 +137,8 @@ library.add(
   faChevronDown,
   faCalendarCheck,
   faCommentDots,
+  faUserDoctor,
+  faCircleXmark,
 )
 
 const app = createApp(App)

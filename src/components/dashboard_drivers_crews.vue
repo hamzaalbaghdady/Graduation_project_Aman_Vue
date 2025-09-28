@@ -24,6 +24,51 @@
           </RouterLink>
         </div>
       </div>
+      <!-- Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <Card
+          :title="`Total Staff`"
+          :count="stats.staff"
+          :icon="`users`"
+          :bg_color="`blue`"
+          :icon_color="`blue`"
+        />
+        <Card
+          :title="`Total Drivers`"
+          :count="stats.driver"
+          :icon="`ambulance`"
+          :bg_color="`blue`"
+          :icon_color="`blue`"
+        />
+        <Card
+          :title="`Total Paramedic`"
+          :count="stats.paramedic"
+          :icon="`user-doctor`"
+          :bg_color="`blue`"
+          :icon_color="`blue`"
+        />
+        <Card
+          :title="`Total Crews`"
+          :count="stats.crew"
+          :icon="`people-group`"
+          :bg_color="`blue`"
+          :icon_color="`yellow`"
+        />
+        <Card
+          :title="`On Duty`"
+          :count="stats.onDuty"
+          :icon="`circle-check`"
+          :bg_color="`blue`"
+          :icon_color="`green`"
+        />
+        <Card
+          :title="`Off Duty`"
+          :count="stats.offDuty"
+          :icon="`circle-xmark`"
+          :bg_color="`blue`"
+          :icon_color="`red`"
+        />
+      </div>
 
       <!-- Filters -->
       <div class="bg-white shadow rounded-lg p-4 mb-6">
@@ -62,26 +107,6 @@
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white shadow rounded-lg p-4 text-center">
-          <h4 class="text-lg font-bold">{{ stats.totalDrivers }}</h4>
-          <p class="text-sm text-gray-500">Drivers</p>
-        </div>
-        <div class="bg-white shadow rounded-lg p-4 text-center">
-          <h4 class="text-lg font-bold">{{ stats.totalCrews }}</h4>
-          <p class="text-sm text-gray-500">Crews</p>
-        </div>
-        <div class="bg-white shadow rounded-lg p-4 text-center">
-          <h4 class="text-lg font-bold text-green-600">{{ stats.onDuty }}</h4>
-          <p class="text-sm text-gray-500">On Duty</p>
-        </div>
-        <div class="bg-white shadow rounded-lg p-4 text-center">
-          <h4 class="text-lg font-bold text-yellow-600">{{ stats.offDuty }}</h4>
-          <p class="text-sm text-gray-500">Off Duty</p>
-        </div>
-      </div>
-
       <!-- Table -->
       <div class="bg-white shadow rounded-lg p-4 mb-5">
         <h3 class="p-4 border-b font-bold">Crews</h3>
@@ -116,8 +141,8 @@ import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Table from '@/components/table.vue'
-import Swal from 'sweetalert2'
 import { useAlert } from '@/composables/useAlert'
+import Card from '@/components/Card.vue'
 
 const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
@@ -128,10 +153,12 @@ const filters = ref({
 })
 
 const stats = ref({
-  totalDrivers: 12,
-  totalCrews: 8,
-  onDuty: 9,
-  offDuty: 11,
+  staff: 135,
+  driver: 40,
+  paramedic: 95,
+  crew: 40,
+  onDuty: 90,
+  offDuty: 45,
 })
 
 const members = ref([

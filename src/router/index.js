@@ -42,7 +42,6 @@ import Profile from '@/components/dashboard_profile.vue'
 import History from '@/components/dashboard_history.vue'
 import Settings from '@/components/dashboard_settings.vue'
 import Log from '@/components/audit_log.vue'
-import Sos from '@/components/sos_monitor.vue'
 import Page404 from '@/components/404_page.vue'
 import Page403 from '@/components/403_page.vue'
 
@@ -225,11 +224,6 @@ const router = createRouter({
           path: 'log',
           name: 'Log',
           component: Log,
-        },
-        {
-          path: 'sos',
-          name: 'Sos',
-          component: Sos,
         },
 
         // Last route

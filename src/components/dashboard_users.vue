@@ -8,31 +8,30 @@
         <h3 class="text-gray-600">Monitor and manage Users</h3>
       </div>
     </div>
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-3 gap-4 mb-6">
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Total Users</h3>
-          <p class="text-2xl font-bold">5862</p>
-        </div>
-        <font-awesome-icon icon="user" class="mr-3 text-2xl text-green-600" />
-      </div>
 
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Mobile App Users</h3>
-          <p class="text-2xl font-bold">4823</p>
-        </div>
-        <font-awesome-icon icon="mobile-android-alt" class="mr-3 text-2xl text-blue-600" />
-      </div>
-
-      <div class="bg-white p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Blocked Users</h3>
-          <p class="text-2xl font-bold">15</p>
-        </div>
-        <font-awesome-icon icon="remove" class="mr-3 text-2xl text-red-600" />
-      </div>
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <Card
+        :title="`Total Users`"
+        :count="stats.total"
+        :icon="`user`"
+        :bg_color="`blue`"
+        :icon_color="`green`"
+      />
+      <Card
+        :title="`Mobile App Users`"
+        :count="stats.mobile_users"
+        :icon="`mobile-android-alt`"
+        :bg_color="`green`"
+        :icon_color="`blue`"
+      />
+      <Card
+        :title="`Blocked Users`"
+        :count="stats.blocked"
+        :icon="`remove`"
+        :bg_color="`red`"
+        :icon_color="`red`"
+      />
     </div>
 
     <!-- Table -->
@@ -52,6 +51,10 @@
 <script setup>
 import { ref } from 'vue'
 import Table from '@/components/table.vue'
+import { useAlert } from '@/composables/useAlert'
+import Card from '@/components/Card.vue'
+
+const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
 const users = ref([
   {
@@ -144,6 +147,11 @@ const users = ref([
   },
 ])
 
+const stats = ref({
+  total: 11568,
+  mobile_users: 1578,
+  blocked: 180,
+})
 const statusClass = (status) => {
   switch (status) {
     case 'Active':
@@ -157,7 +165,18 @@ const statusClass = (status) => {
 }
 
 function handleBlock(row) {
-  console.log('Delete this user:', row)
-  // Call Laravel API here
+  confirmDialog(
+    'Are you sure you want to block member #' + row.id + '?',
+    "You won't be able to undo this!",
+  ).then((result) => {
+    if (result.isConfirmed) {
+      // Call Laravel API here
+      if (false) {
+        successAlert('Blocked!', 'Your item has been blocked.')
+      } else {
+        errorAlert('Failed!', 'Your item has Not been blocked.')
+      }
+    }
+  })
 }
 </script>
