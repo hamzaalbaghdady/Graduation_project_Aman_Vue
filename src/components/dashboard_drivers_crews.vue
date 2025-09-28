@@ -150,21 +150,6 @@ const applyFilters = () => {
   console.log('Filters applied', filters.value)
 }
 
-const statusClass = (status) => {
-  switch (status) {
-    case 'On Duty':
-      return 'bg-green-100 text-green-800'
-    case 'Active':
-      return 'bg-blue-100 text-blue-800'
-    case 'Off Duty':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'Inactive':
-      return 'bg-gray-100 text-gray-600'
-    default:
-      return 'bg-gray-100 text-gray-600'
-  }
-}
-
 function handleBlock(row) {
   console.log('Block this user:', row)
   // Call Laravel API here

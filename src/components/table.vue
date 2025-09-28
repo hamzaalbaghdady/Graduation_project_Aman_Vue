@@ -50,7 +50,7 @@
 
               <router-link
                 v-else-if="action === 'edit'"
-                :to="link !== '' ? link + row.id : `${myRoute}/${row.id}`"
+                :to="link !== '' ? link + row.id : `${myRoute}/edit/${row.id}`"
               >
                 <font-awesome-icon icon="edit" class="text-xl text-blue-500 hover:text-blue-800" />
               </router-link>
