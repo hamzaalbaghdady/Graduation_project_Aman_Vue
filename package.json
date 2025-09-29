@@ -31,7 +31,8 @@
     "vue": "^3.5.18",
     "vue-chartjs": "^5.3.2",
     "vue-echarts": "^7.0.3",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",

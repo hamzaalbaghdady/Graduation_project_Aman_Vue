@@ -36,7 +36,15 @@
 
     <!-- Table -->
     <div class="bg-white rounded shadow">
-      <div class="p-4 border-b font-bold">System Users</div>
+      <div class="p-4 border-b flex justify-between">
+        <h1 class="font-bold">System Users</h1>
+        <button
+          @click="downloadExcel"
+          class="flex items-center p-2 rounded bg-green-600 text-white font-medium hover:bg-green-700"
+        >
+          <font-awesome-icon icon="file-excel" class="text-xl mr-1" />
+        </button>
+      </div>
       <Table
         :headers="['ID', 'Name', 'Gender', 'Address', 'Info', 'Status']"
         :data="users"
@@ -53,6 +61,7 @@ import { ref } from 'vue'
 import Table from '@/components/table.vue'
 import { useAlert } from '@/composables/useAlert'
 import Card from '@/components/Card.vue'
+import { useFileGenerator } from '@/composables/fileGenerator'
 
 const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
@@ -178,5 +187,15 @@ function handleBlock(row) {
       }
     }
   })
+}
+
+const { exportToExcel, exportJsonToExcel, exportToCSV } = useFileGenerator()
+const downloadExcel = () => {
+  // Convert to plain JS array of objects (deep clone)
+  const plainData = users.value.map((e) => ({ ...e }))
+
+  exportToExcel(plainData, 'users', 'users', null, true)
+    .then(() => console.log('Excel exported'))
+    .catch((err) => console.error(err))
 }
 </script>

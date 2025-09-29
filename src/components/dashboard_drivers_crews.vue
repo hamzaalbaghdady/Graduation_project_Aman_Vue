@@ -109,7 +109,15 @@
 
       <!-- Table -->
       <div class="bg-white shadow rounded-lg p-4 mb-5">
-        <h3 class="p-4 border-b font-bold">Crews</h3>
+        <div class="p-4 border-b flex justify-between">
+          <h1 class="font-bold">Crews</h1>
+          <button
+            @click="downloadExcel_crews"
+            class="flex items-center p-2 rounded bg-green-600 text-white font-medium hover:bg-green-700"
+          >
+            <font-awesome-icon icon="file-excel" class="text-xl mr-1" />
+          </button>
+        </div>
         <Table
           :headers="['ID', 'Name', 'Size', 'Members', 'Status']"
           :data="crews"
@@ -122,7 +130,15 @@
 
       <!-- Table -->
       <div class="bg-white shadow rounded-lg p-4">
-        <h3 class="p-4 border-b font-bold">Members</h3>
+        <div class="p-4 border-b flex justify-between">
+          <h1 class="font-bold">Members</h1>
+          <button
+            @click="downloadExcel_members"
+            class="flex items-center p-2 rounded bg-green-600 text-white font-medium hover:bg-green-700"
+          >
+            <font-awesome-icon icon="file-excel" class="text-xl mr-1" />
+          </button>
+        </div>
         <Table
           :headers="['ID', 'Name', 'Email', 'Role', 'Crew', 'Status', 'Last_Active']"
           :data="members"
@@ -143,6 +159,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Table from '@/components/table.vue'
 import { useAlert } from '@/composables/useAlert'
 import Card from '@/components/Card.vue'
+import { useFileGenerator } from '@/composables/fileGenerator'
 
 const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
@@ -300,5 +317,24 @@ function handleDelete(row) {
       }
     }
   })
+}
+
+const { exportToExcel, exportJsonToExcel, exportToCSV } = useFileGenerator()
+
+const downloadExcel_crews = () => {
+  // Convert to plain JS array of objects (deep clone)
+  const plainData = crews.value.map((e) => ({ ...e }))
+
+  exportToExcel(plainData, 'crews', 'crews', null, true)
+    .then(() => console.log('Excel exported'))
+    .catch((err) => console.error(err))
+}
+const downloadExcel_members = () => {
+  // Convert to plain JS array of objects (deep clone)
+  const plainData = members.value.map((e) => ({ ...e }))
+
+  exportToExcel(plainData, 'members', 'members', null, true)
+    .then(() => console.log('Excel exported'))
+    .catch((err) => console.error(err))
 }
 </script>

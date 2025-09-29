@@ -1,7 +1,16 @@
 <!-- Table -->
 <template>
   <div class="bg-white rounded shadow">
-    <div class="p-4 border-b font-bold">Live SOS Requests</div>
+    <div class="p-4 border-b flex justify-between">
+      <h1 class="font-bold">Live SOS Requests</h1>
+      <button
+        @click="downloadExcel"
+        class="flex items-center p-2 rounded bg-green-600 text-white font-medium hover:bg-green-700"
+      >
+        <font-awesome-icon icon="file-excel" class="text-xl mr-1" />
+      </button>
+    </div>
+
     <Table
       :headers="[
         'ID',
@@ -23,7 +32,7 @@
 <script setup>
 import { ref } from 'vue'
 import Table from '@/components/table.vue'
-
+import { useFileGenerator } from '@/composables/fileGenerator'
 const emergencies = ref([
   {
     id: 'E202536985',
@@ -226,4 +235,14 @@ const emergencies = ref([
     priority: 'Low',
   },
 ])
+
+const { exportToExcel, exportJsonToExcel, exportToCSV } = useFileGenerator()
+const downloadExcel = () => {
+  // Convert to plain JS array of objects (deep clone)
+  const plainData = emergencies.value.map((e) => ({ ...e }))
+
+  exportToExcel(plainData, 'emergencies', 'emergencies', null, true)
+    .then(() => console.log('Excel exported'))
+    .catch((err) => console.error(err))
+}
 </script>

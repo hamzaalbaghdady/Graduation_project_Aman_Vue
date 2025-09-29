@@ -13,11 +13,6 @@
         >
           <font-awesome-icon icon="file-pdf" class="mr-1" />Download as PDF
         </button>
-        <button
-          class="flex items-center p-2 rounded bg-indigo-600 text-white font-medium hover:bg-indigo-800"
-        >
-          <font-awesome-icon icon="file-excel" class="mr-1" />Download as Excel
-        </button>
       </div>
     </div>
 
