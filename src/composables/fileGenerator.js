@@ -147,6 +147,61 @@ export function useFileGenerator() {
     })
   }
 
+  /**
+   * Export HTML content to PDF
+   */
+  const exportToPDF = async (element, fileName = 'document.pdf', options = {}) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // Add date-time to filename
+        const now = new Date()
+        const dateStr = now.toISOString().split('T')[0] // YYYY-MM-DD
+        const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-') // HH-MM-SS
+        filename = `${filename}_${dateStr}_${timeStr}.pdf`
+
+        // Default options
+        const defaultOptions = {
+          margin: 10,
+          filename: fileName,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+          },
+          jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'portrait',
+          },
+          ...options,
+        }
+
+        // Use setTimeout to avoid blocking UI
+        setTimeout(() => {
+          try {
+            const pdfExport = window ///
+              .html2pdf()
+              .default()
+              .from(element)
+              .set(defaultOptions)
+              .save()
+              .then(() => {
+                resolve({ success: true, fileName })
+              })
+              .catch((error) => {
+                reject(error)
+              })
+          } catch (error) {
+            reject(error)
+          }
+        }, 0)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   return {
     exportToExcel,
     exportJsonToExcel,

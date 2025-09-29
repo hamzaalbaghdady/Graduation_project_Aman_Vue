@@ -10,10 +10,43 @@
         </p>
       </div>
       <button
+        @click="downloadExcel"
         class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-2"
       >
         <font-awesome-icon icon="download" /> Export Data
       </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <Card
+        :title="`Total Requests`"
+        :count="stats.totalRequests"
+        :icon="`chart-line`"
+        :bg_color="`blue`"
+        :icon_color="`blue`"
+      />
+      <Card
+        :title="`Completed`"
+        :count="stats.completed"
+        :icon="`check-circle`"
+        :bg_color="`blue`"
+        :icon_color="`green`"
+      />
+      <Card
+        :title="`Avg Response Time`"
+        :count="stats.avgTime"
+        :icon="`wave-square`"
+        :bg_color="`blue`"
+        :icon_color="`blue`"
+      />
+      <Card
+        :title="`Success Rate`"
+        :count="stats.successRate"
+        :icon="`percent`"
+        :bg_color="`blue`"
+        :icon_color="`blue`"
+      />
     </div>
 
     <!-- Filters -->
@@ -47,131 +80,41 @@
         <div class="flex items-end">
           <button
             @click="applyFilters"
-            class="w-full px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 flex items-center justify-center gap-2"
+            class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center justify-center gap-2"
           >
             <font-awesome-icon icon="filter" /> Apply Filters
           </button>
         </div>
       </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-gray-50 p-4 rounded-lg text-center">
-          <p class="text-sm text-gray-500">Total Requests</p>
-          <p class="text-xl font-semibold">247</p>
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg text-center">
-          <p class="text-sm text-gray-500">Completed</p>
-          <p class="text-xl font-semibold">231</p>
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg text-center">
-          <p class="text-sm text-gray-500">Avg Response Time</p>
-          <p class="text-xl font-semibold">4.2m</p>
-        </div>
-        <div class="bg-gray-50 p-4 rounded-lg text-center">
-          <p class="text-sm text-gray-500">Success Rate</p>
-          <p class="text-xl font-semibold">93.5%</p>
-        </div>
-      </div>
     </div>
 
-    <!-- Request History -->
-    <div class="bg-white shadow rounded-xl p-6">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-medium text-gray-800">Request History</h2>
-        <div class="flex gap-2">
-          <button class="px-3 py-1 border rounded-lg text-sm flex items-center gap-1">
-            <font-awesome-icon icon="file-csv" /> CSV
-          </button>
-          <button class="px-3 py-1 border rounded-lg text-sm flex items-center gap-1">
-            <font-awesome-icon icon="file-pdf" /> PDF
-          </button>
-        </div>
+    <!-- Table -->
+    <div class="bg-white rounded shadow">
+      <div class="p-4 border-b flex justify-between">
+        <h1 class="font-bold">History</h1>
+        <button
+          @click="downloadExcel"
+          class="flex items-center p-2 rounded bg-green-600 text-white font-medium hover:bg-green-700"
+        >
+          <font-awesome-icon icon="file-excel" class="text-xl mr-1" />
+        </button>
       </div>
-
-      <!-- Table -->
-      <table class="w-full border-collapse text-sm">
-        <thead class="border-b text-gray-600">
-          <tr>
-            <th class="p-3 text-left">Request ID</th>
-            <th class="p-3 text-left">Date & Time</th>
-            <th class="p-3 text-left">Incident Type</th>
-            <th class="p-3 text-left">Location</th>
-            <th class="p-3 text-left">Status</th>
-            <th class="p-3 text-left">Response Time</th>
-            <th class="p-3 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="req in paginatedRequests" :key="req.id" class="border-b hover:bg-gray-50">
-            <td class="p-3 font-medium text-indigo-600">#{{ req.id }}</td>
-            <td class="p-3">{{ req.date }}</td>
-            <td class="p-3">
-              <span
-                class="px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit"
-                :class="incidentTypeClass(req.type)"
-              >
-                <font-awesome-icon :icon="incidentTypeIcon(req.type)" />
-                {{ req.type }}
-              </span>
-            </td>
-            <td class="p-3">{{ req.location }}</td>
-            <td class="p-3">
-              <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-600">
-                Completed
-              </span>
-            </td>
-            <td class="p-3">{{ req.response }}</td>
-            <td class="p-3">
-              <button class="text-gray-600 hover:text-indigo-600">
-                <font-awesome-icon icon="eye" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Pagination -->
-      <div class="flex justify-between items-center mt-4 text-sm text-gray-500">
-        <p>
-          Showing {{ startIndex + 1 }} to {{ Math.min(startIndex + perPage, requests.length) }} of
-          {{ requests.length }} results
-        </p>
-
-        <div class="flex gap-1">
-          <button
-            class="px-3 py-1 border rounded-lg"
-            :disabled="currentPage === 1"
-            @click="currentPage--"
-          >
-            Prev
-          </button>
-
-          <button
-            v-for="page in totalPages"
-            :key="page"
-            class="px-3 py-1 border rounded-lg"
-            :class="page === currentPage ? 'bg-indigo-600 text-white' : ''"
-            @click="goToPage(page)"
-          >
-            {{ page }}
-          </button>
-
-          <button
-            class="px-3 py-1 border rounded-lg"
-            :disabled="currentPage === totalPages"
-            @click="currentPage++"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <Table
+        :headers="['ID', 'Date', 'Type', 'Location', 'Response', 'status']"
+        :data="requests"
+        :perPage="3"
+        @delete="handleDelete"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import Table from '@/components/table.vue'
+import { useAlert } from '@/composables/useAlert'
+import Card from '@/components/Card.vue'
+import { useFileGenerator } from '@/composables/fileGenerator'
 
 const filters = ref({
   from: '2025-01-01',
@@ -179,6 +122,12 @@ const filters = ref({
   type: 'all',
 })
 
+const stats = ref({
+  totalRequests: 253,
+  completed: 187,
+  avgTime: 4.7,
+  successRate: 91,
+})
 const requests = ref([
   {
     id: 'ER-2025-0147',
@@ -186,6 +135,7 @@ const requests = ref([
     type: 'Fire Emergency',
     location: '123 Main St, Downtown',
     response: '3.5 min',
+    status: 'Completed',
   },
   {
     id: 'ER-2025-0146',
@@ -193,6 +143,7 @@ const requests = ref([
     type: 'Medical Emergency',
     location: '456 Oak Ave, Midtown',
     response: '2.8 min',
+    status: 'Canceled',
   },
   {
     id: 'ER-2025-0145',
@@ -200,6 +151,7 @@ const requests = ref([
     type: 'Police Response',
     location: '789 Pine St, Uptown',
     response: '5.2 min',
+    status: 'Completed',
   },
   {
     id: 'ER-2025-0144',
@@ -207,6 +159,7 @@ const requests = ref([
     type: 'Rescue Operation',
     location: '321 River Rd, Riverside',
     response: '7.1 min',
+    status: 'Completed',
   },
   // 🔽 Add more dummy rows to test pagination
   {
@@ -215,6 +168,7 @@ const requests = ref([
     type: 'Fire Emergency',
     location: '111 Maple St, Suburb',
     response: '4.2 min',
+    status: 'Failed',
   },
   {
     id: 'ER-2025-0142',
@@ -222,6 +176,7 @@ const requests = ref([
     type: 'Medical Emergency',
     location: '222 Birch St, Uptown',
     response: '3.1 min',
+    status: 'Completed',
   },
   {
     id: 'ER-2025-0141',
@@ -229,6 +184,7 @@ const requests = ref([
     type: 'Rescue Operation',
     location: '333 Cedar St, Riverside',
     response: '6.0 min',
+    status: 'Completed',
   },
 ])
 
@@ -236,51 +192,13 @@ const applyFilters = () => {
   console.log('Filters applied:', filters.value)
 }
 
-const currentPage = ref(1)
-const perPage = 4
+const { exportToExcel, exportJsonToExcel, exportToCSV } = useFileGenerator()
+const downloadExcel = () => {
+  // Convert to plain JS array of objects (deep clone)
+  const plainData = requests.value.map((e) => ({ ...e }))
 
-const totalPages = computed(() => Math.ceil(requests.value.length / perPage))
-
-const startIndex = computed(() => (currentPage.value - 1) * perPage)
-
-const paginatedRequests = computed(() =>
-  requests.value.slice(startIndex.value, startIndex.value + perPage),
-)
-
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-  }
-}
-
-// incident styling
-const incidentTypeClass = (type) => {
-  switch (type) {
-    case 'Fire Emergency':
-      return 'bg-red-100 text-red-600'
-    case 'Medical Emergency':
-      return 'bg-blue-100 text-blue-600'
-    case 'Police Response':
-      return 'bg-indigo-100 text-indigo-600'
-    case 'Rescue Operation':
-      return 'bg-green-100 text-green-600'
-    default:
-      return 'bg-gray-100 text-gray-600'
-  }
-}
-
-const incidentTypeIcon = (type) => {
-  switch (type) {
-    case 'Fire Emergency':
-      return 'fire'
-    case 'Medical Emergency':
-      return 'kit-medical'
-    case 'Police Response':
-      return 'shield-halved'
-    case 'Rescue Operation':
-      return 'life-ring'
-    default:
-      return 'circle'
-  }
+  exportToExcel(plainData, 'history', 'history', null, true)
+    .then(() => console.log('Excel exported'))
+    .catch((err) => console.error(err))
 }
 </script>

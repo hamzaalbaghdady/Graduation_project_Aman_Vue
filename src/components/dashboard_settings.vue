@@ -121,10 +121,16 @@
       <div class="flex justify-between items-center border-t pt-4">
         <p class="text-xs text-gray-400">Last updated: January 15, 2025 at 2:30 PM</p>
         <div class="flex gap-3">
-          <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+          <button
+            @click="reset"
+            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+          >
             Reset to Defaults
           </button>
-          <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+          <button
+            @click="save"
+            class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          >
             <font-awesome-icon icon="save" class="mr-3" /> Save Configuration
           </button>
         </div>
@@ -158,5 +164,18 @@ const viewPassword = () => {
     type.value = 'password'
     eyeIcon = 'eye'
   }
+}
+
+const save = () => {
+  console.log('Saved: ' + form.value)
+}
+const reset = () => {
+  // Reset each property individually
+  form.value.distanceThreshold = 100
+  form.value.timeoutLimit = 10
+  form.value.smsGateway = '+1234567890'
+  form.value.smsApiKey = 'SMS154f5fg2d8f2158e2d8es315e5'
+
+  console.log('Reset to defaults:', form.value)
 }
 </script>

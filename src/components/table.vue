@@ -171,6 +171,8 @@ const statusClass = (status) => {
       return 'px-4 py-2 text-sm text-green-600 border-b'
     case 'Canceled':
       return 'px-4 py-2 text-sm text-red-600 border-b'
+    case 'Failed':
+      return 'px-4 py-2 text-sm text-red-600 border-b'
     case 'Inactive':
       return 'px-4 py-2 text-sm text-red-600 border-b'
     case 'Blocked':

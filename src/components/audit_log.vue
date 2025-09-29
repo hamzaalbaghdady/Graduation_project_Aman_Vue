@@ -60,6 +60,7 @@
         <div class="flex items-center gap-4">
           <p class="text-sm text-gray-500">{{ logs.length.toLocaleString() }} records</p>
           <button
+            @click="downloadExcel"
             class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
           >
             <font-awesome-icon icon="file-export" class="mr-2" /> Export
@@ -129,7 +130,8 @@
           <button
             @click="prevPage"
             :disabled="page === 1"
-            class="px-3 py-1 border rounded-lg hover:bg-gray-100 disabled:opacity-50"
+            :class="page === 1 ? `bg-gray-100` : `bg-indigo-300 hover:bg-indigo-400`"
+            class="px-3 py-1 border rounded-lg disabled:opacity-50"
           >
             <font-awesome-icon icon="angle-left" />
           </button>
@@ -137,6 +139,7 @@
           <button
             @click="nextPage"
             :disabled="endIndex >= logs.length"
+            :class="endIndex >= logs.length ? `bg-gray-100` : `bg-indigo-300 hover:bg-indigo-400`"
             class="px-3 py-1 border rounded-lg hover:bg-gray-100 disabled:opacity-50"
           >
             <font-awesome-icon icon="angle-right" />
@@ -156,30 +159,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faList,
-  faFilter,
-  faUndo,
-  faFileExport,
-  faUserCircle,
-  faAngleLeft,
-  faAngleRight,
-  faQuestion,
-} from '@fortawesome/free-solid-svg-icons'
-
-// Register icons
-library.add(
-  faList,
-  faFilter,
-  faUndo,
-  faFileExport,
-  faUserCircle,
-  faAngleLeft,
-  faAngleRight,
-  faQuestion,
-)
+import { useFileGenerator } from '@/composables/fileGenerator'
 
 const filters = ref({
   user: 'all',
@@ -245,11 +225,55 @@ const logs = ref([
     ip: '127.0.0.1',
     status: 'Success',
   },
+  {
+    name: 'Lisa Wilson',
+    email: 'lisa.wilson@company.com',
+    action: 'Settings Update',
+    category: 'Configuration',
+    resource: '/admin/settings',
+    timestamp: '2025-01-15 07:55:18',
+    relative: '4 hours ago',
+    ip: '172.16.0.10',
+    status: 'Success',
+  },
+  {
+    name: 'Admin System',
+    email: 'system@company.com',
+    action: 'Database Backup',
+    category: 'System Operation',
+    resource: '/system/backup',
+    timestamp: '2025-01-15 06:00:00',
+    relative: '6 hours ago',
+    ip: '127.0.0.1',
+    status: 'Success',
+  },
+  {
+    name: 'Lisa Wilson',
+    email: 'lisa.wilson@company.com',
+    action: 'Settings Update',
+    category: 'Configuration',
+    resource: '/admin/settings',
+    timestamp: '2025-01-15 07:55:18',
+    relative: '4 hours ago',
+    ip: '172.16.0.10',
+    status: 'Success',
+  },
+  {
+    name: 'Admin System',
+    email: 'system@company.com',
+    action: 'Database Backup',
+    category: 'System Operation',
+    resource: '/system/backup',
+    timestamp: '2025-01-15 06:00:00',
+    relative: '6 hours ago',
+    ip: '127.0.0.1',
+    status: 'Success',
+  },
 ])
 
 // Pagination
 const page = ref(1)
-const pageSize = 10
+const pageSize = 5
 
 const startIndex = computed(() => (page.value - 1) * pageSize)
 const endIndex = computed(() => Math.min(startIndex.value + pageSize, logs.value.length))
@@ -271,5 +295,15 @@ const resetFilters = () => {
   filters.value.user = 'all'
   filters.value.startDate = '2025-01-01'
   filters.value.endDate = '2025-01-31'
+}
+
+const { exportToExcel, exportJsonToExcel, exportToCSV } = useFileGenerator()
+const downloadExcel = () => {
+  // Convert to plain JS array of objects (deep clone)
+  const plainData = logs.value.map((e) => ({ ...e }))
+
+  exportToExcel(plainData, 'System_log', 'log', null, true)
+    .then(() => console.log('Excel exported'))
+    .catch((err) => console.error(err))
 }
 </script>

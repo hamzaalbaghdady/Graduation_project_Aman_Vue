@@ -74,6 +74,14 @@ import {
   faCommentDots,
   faUserDoctor,
   faCircleXmark,
+  faPercent,
+  faWaveSquare,
+  faList,
+  faUndo,
+  faFileExport,
+  faUserCircle,
+  faAngleLeft,
+  faAngleRight,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Add to library
@@ -139,6 +147,14 @@ library.add(
   faCommentDots,
   faUserDoctor,
   faCircleXmark,
+  faPercent,
+  faWaveSquare,
+  faList,
+  faUndo,
+  faFileExport,
+  faUserCircle,
+  faAngleLeft,
+  faAngleRight,
 )
 
 const app = createApp(App)
