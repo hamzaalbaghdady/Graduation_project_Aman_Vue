@@ -1,9 +1,134 @@
+<template>
+  <!-- Dashboard Content -->
+  <div v-if="loading" class="text-center h-full text-6xl p-5 relative"><Spinner /></div>
+  <main v-else class="flex-1 p-6 overflow-y-auto">
+    <!-- Title -->
+    <div class="pb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl">Emergencies Managment</h1>
+        <h3 class="text-gray-600">Monitor and manage live SOS requests</h3>
+      </div>
+      <div>
+        <RouterLink
+          to="/emergencies/add"
+          class="flex items-center p-2 rounded bg-indigo-600 text-white font-medium hover:bg-indigo-800"
+          ><font-awesome-icon icon="phone" class="mr-1" /> New Phone Entry</RouterLink
+        >
+      </div>
+    </div>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <Card
+        :title="`Total Emergencies`"
+        :count="stats.total"
+        :icon="`database`"
+        :bg_color="`blue`"
+        :icon_color="`blue`"
+      />
+      <Card
+        :title="`Pending Emergencies`"
+        :count="stats.pending"
+        :icon="`hourglass-2`"
+        :bg_color="`red`"
+        :icon_color="`red`"
+      />
+      <Card
+        :title="`Active Emergencie`"
+        :count="stats.active"
+        :icon="`check-circle`"
+        :bg_color="`yellow`"
+        :icon_color="`green`"
+      />
+      <Card
+        :title="`completed Emergencies`"
+        :count="stats.completed"
+        :icon="`flag-checkered`"
+        :bg_color="`green`"
+        :icon_color="`blue`"
+      />
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white shadow rounded-xl p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
+        <!-- Dispatchers Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Dispatcher</label>
+          <select v-model="selectedDispatcher" class="w-full border rounded px-3 py-2">
+            <option value="all">All Dispatchers</option>
+            <option v-for="d in dispatchers" :key="d">{{ d }}</option>
+          </select>
+        </div>
+
+        <!-- Dispatchers Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+          <select v-model="selectedLocation" class="w-full border rounded px-3 py-2">
+            <option value="all">All Locations</option>
+            <option v-for="l in locations" :key="l">{{ l }}</option>
+          </select>
+        </div>
+
+        <!-- Type Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+          <select v-model="selectedIncidentType" class="w-full border rounded px-3 py-2">
+            <option value="all">All Types</option>
+            <option v-for="t in incidentTypes" :key="t">{{ t }}</option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-3">
+          <button
+            @click="applyFilters"
+            class="flex-1 flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          >
+            <font-awesome-icon icon="filter" class="mr-2" /> Apply Filters
+          </button>
+          <button
+            @click="resetFilters"
+            class="flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+          >
+            <font-awesome-icon icon="undo" class="mr-2" /> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergencies Table -->
+    <ETable />
+
+    <!-- Emergency Types Table -->
+    <div class="bg-white rounded shadow mt-9">
+      <div class="flex justify-between border-b items-center">
+        <h1 class="p-4 font-bold">Manage Emergency Types</h1>
+        <RouterLink
+          to="/emergencies/types/add"
+          class="flex items-center p-2 m-2 rounded bg-indigo-600 text-white font-medium hover:bg-indigo-800 h-10"
+          ><font-awesome-icon icon="plus" class="mr-1" /> Add New Type</RouterLink
+        >
+      </div>
+      <Table
+        :headers="['ID', 'Type', 'Description']"
+        :data="emergencyTypes"
+        :actions="['edit', 'delete']"
+        :perPage="8"
+        :link="`/emergencies/types/edit/`"
+        @delete="handleDelete"
+      />
+    </div>
+  </main>
+</template>
+
 <script setup>
 import ETable from '@/components/Emergencies_table.vue'
 import Table from '@/components/table.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { statisticsService, dispatcherService, emergencyService } from '@/services'
 import { useAlert } from '@/composables/useAlert'
 import Card from '@/components/Card.vue'
+import Spinner from '@/components/Spinner.vue'
 
 const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
@@ -174,6 +299,7 @@ const stats = ref({
   completed: 723,
 })
 
+// Filters
 const dispatchers = ['Sarah Johnson', 'Mike Chen', 'Lisa Rodriguez']
 const locations = ['Downtown District', 'North Zone', 'East Sector']
 const incidentTypes = emergencyTypes.map((emergency) => emergency.type)
@@ -194,6 +320,7 @@ const filteredRequests = computed(() => {
   })
 })
 
+// Handle emergency type delete
 function handleDelete(row) {
   confirmDialog(
     'Are you sure you want to delete "' + row.type + '"?',
@@ -209,125 +336,34 @@ function handleDelete(row) {
     }
   })
 }
+
+// const toast = useToast()
+const loading = ref(false)
+const counts = ref([])
+
+// Load initial data
+const loadData = async () => {
+  try {
+    loading.value = true
+    const [emergenciesResponse, dispatchersResponse, countsResponse] = await Promise.all([
+      emergencyService.getEmergencies(),
+      dispatcherService.getDispatchers(),
+      statisticsService.getCounts(),
+    ])
+
+    emergencies.value = emergenciesResponse.data
+    dispatchers.value = dispatchersResponse.data
+    counts.value = countsResponse.data
+  } catch (error) {
+    console.error('Error loading data:', error)
+    errorAlert('Failed!', "We can't load data, Help your self with this fake data for now ;)")
+  } finally {
+    loading.value = false
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  loadData()
+})
 </script>
-<template>
-  <!-- Dashboard Content -->
-  <main class="flex-1 p-6 overflow-y-auto">
-    <!-- Title -->
-    <div class="pb-6 flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl">Emergencies Managment</h1>
-        <h3 class="text-gray-600">Monitor and manage live SOS requests</h3>
-      </div>
-      <div>
-        <RouterLink
-          to="/emergencies/add"
-          class="flex items-center p-2 rounded bg-indigo-600 text-white font-medium hover:bg-indigo-800"
-          ><font-awesome-icon icon="phone" class="mr-1" /> New Phone Entry</RouterLink
-        >
-      </div>
-    </div>
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-      <Card
-        :title="`Total Emergencies`"
-        :count="stats.total"
-        :icon="`database`"
-        :bg_color="`blue`"
-        :icon_color="`blue`"
-      />
-      <Card
-        :title="`Pending Emergencies`"
-        :count="stats.pending"
-        :icon="`hourglass-2`"
-        :bg_color="`red`"
-        :icon_color="`red`"
-      />
-      <Card
-        :title="`Active Emergencie`"
-        :count="stats.active"
-        :icon="`check-circle`"
-        :bg_color="`yellow`"
-        :icon_color="`green`"
-      />
-      <Card
-        :title="`completed Emergencies`"
-        :count="stats.completed"
-        :icon="`flag-checkered`"
-        :bg_color="`green`"
-        :icon_color="`blue`"
-      />
-    </div>
-
-    <!-- Filters -->
-    <div class="bg-white shadow rounded-xl p-6 mb-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-5 items-end">
-        <!-- Dispatchers Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Dispatcher</label>
-          <select v-model="selectedDispatcher" class="w-full border rounded px-3 py-2">
-            <option value="all">All Dispatchers</option>
-            <option v-for="d in dispatchers" :key="d">{{ d }}</option>
-          </select>
-        </div>
-
-        <!-- Dispatchers Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
-          <select v-model="selectedLocation" class="w-full border rounded px-3 py-2">
-            <option value="all">All Locations</option>
-            <option v-for="l in locations" :key="l">{{ l }}</option>
-          </select>
-        </div>
-
-        <!-- Type Filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-          <select v-model="selectedIncidentType" class="w-full border rounded px-3 py-2">
-            <option value="all">All Types</option>
-            <option v-for="t in incidentTypes" :key="t">{{ t }}</option>
-          </select>
-        </div>
-
-        <!-- Buttons -->
-        <div class="flex gap-3">
-          <button
-            @click="applyFilters"
-            class="flex-1 flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-          >
-            <font-awesome-icon icon="filter" class="mr-2" /> Apply Filters
-          </button>
-          <button
-            @click="resetFilters"
-            class="flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
-          >
-            <font-awesome-icon icon="undo" class="mr-2" /> Reset
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Emergencies Table -->
-    <ETable />
-
-    <!-- Emergency Types Table -->
-    <div class="bg-white rounded shadow mt-9">
-      <div class="flex justify-between border-b items-center">
-        <h1 class="p-4 font-bold">Manage Emergency Types</h1>
-        <RouterLink
-          to="/emergencies/types/add"
-          class="flex items-center p-2 m-2 rounded bg-indigo-600 text-white font-medium hover:bg-indigo-800 h-10"
-          ><font-awesome-icon icon="plus" class="mr-1" /> Add New Type</RouterLink
-        >
-      </div>
-      <Table
-        :headers="['ID', 'Type', 'Description']"
-        :data="emergencyTypes"
-        :actions="['edit', 'delete']"
-        :perPage="8"
-        :link="`/emergencies/types/edit/`"
-        @delete="handleDelete"
-      />
-    </div>
-  </main>
-</template>

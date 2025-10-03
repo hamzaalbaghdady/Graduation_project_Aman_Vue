@@ -9,3 +9,4 @@ export { roleService } from './roleService'
 // export { reportService } from './reportService';
 export { profileService } from './profileService'
 export { systemLogService } from './systemLogService'
+export { statisticsService } from './statisticsService'

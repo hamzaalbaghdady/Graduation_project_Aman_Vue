@@ -1,44 +1,43 @@
 <template>
   <!-- Dashboard Content -->
-  <main class="flex-1 p-6 overflow-y-auto">
+  <div v-if="loading" class="text-center h-full text-6xl p-5 relative"><Spinner /></div>
+  <main v-else class="flex-1 p-6 overflow-y-auto">
     <!-- Title -->
     <div class="pb-6 items-center justify-between">
       <h1 class="text-3xl">Dashboard</h1>
       <h3 class="text-gray-600">Monitor and manage all resources</h3>
     </div>
+
     <!-- Stats Cards -->
-    <div class="grid grid-cols-4 gap-2 mb-3">
-      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Active Emergencies</h3>
-          <p class="text-2xl font-bold">12</p>
-        </div>
-        <font-awesome-icon icon="exclamation-triangle" class="text-2xl text-green-500" />
-      </div>
-
-      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Pending Emergencies</h3>
-          <p class="text-2xl font-bold">8</p>
-        </div>
-        <font-awesome-icon icon="exclamation-triangle" class="text-2xl text-red-500" />
-      </div>
-
-      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Assigned Ambulances</h3>
-          <p class="text-2xl font-bold">15</p>
-        </div>
-        <font-awesome-icon icon="ambulance" class="text-2xl text-red-500" />
-      </div>
-
-      <div class="bg-blue-100 p-6 rounded shadow flex items-center justify-between">
-        <div>
-          <h3 class="text-sm text-gray-500">Avilable Ambulances</h3>
-          <p class="text-2xl font-bold">0</p>
-        </div>
-        <font-awesome-icon icon="ambulance" class="text-2xl text-green-500" />
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <Card
+        :title="`Active Emergencies`"
+        :count="stats.active"
+        :icon="`exclamation-triangle`"
+        :bg_color="`blue`"
+        :icon_color="`green`"
+      />
+      <Card
+        :title="`Pending Emergencies`"
+        :count="stats.pending"
+        :icon="`exclamation-triangle`"
+        :bg_color="`blue`"
+        :icon_color="`red`"
+      />
+      <Card
+        :title="`Assigned Ambulances`"
+        :count="stats.assigned"
+        :icon="`ambulance`"
+        :bg_color="`blue`"
+        :icon_color="`red`"
+      />
+      <Card
+        :title="`Avilable Ambulances`"
+        :count="stats.avilable"
+        :icon="`ambulance`"
+        :bg_color="`blue`"
+        :icon_color="`green`"
+      />
     </div>
 
     <!-- Charts Cards -->
@@ -49,22 +48,9 @@
         </div>
         <ChartComponent
           type="line"
-          title="Emergencies"
-          :labels="[
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'June',
-            'July',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-          ]"
-          :data="[1586, 150, 496, 700, 654, 1235, 1111, 2036, 5398, 0, 0, 0]"
+          :title="lineChart.title"
+          :labels="lineChart.labels"
+          :data="lineChart.data"
         />
       </div>
 
@@ -74,9 +60,9 @@
         </div>
         <ChartComponent
           type="pie"
-          title="Incident Types"
-          :labels="['Bombing', 'Heart Attack', 'Fire', 'Breaks']"
-          :data="[1500, 90, 158, 387]"
+          :title="BieChart.title"
+          :labels="BieChart.labels"
+          :data="BieChart.data"
         />
       </div>
     </div>
@@ -86,65 +72,54 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Table from '@/components/Emergencies_table.vue'
+import Card from '@/components/Card.vue'
+import Spinner from '@/components/Spinner.vue'
 import ChartComponent from '@/components/Chart.vue'
+import { statisticsService } from '@/services'
+import { useAlert } from '@/composables/useAlert'
 
-const requests = ref([
-  {
-    id: '#SOS-2025-001',
-    civilian: 'John Smith',
-    phone: '+1 555-0123',
-    location: '123 Main St, Downtown',
-    time: '2 min ago',
-    status: 'Pending',
-  },
-  {
-    id: '#SOS-2025-002',
-    civilian: 'Sarah Johnson',
-    phone: '+1 555-0456',
-    location: '456 Oak Ave, Midtown',
-    time: '5 min ago',
-    status: 'Assigned',
-  },
-  {
-    id: '#SOS-2025-003',
-    civilian: 'Mike Davis',
-    phone: '+1 555-0789',
-    location: '789 Pine Rd, Uptown',
-    time: '12 min ago',
-    status: 'Completed',
-  },
-  {
-    id: '#SOS-2025-004',
-    civilian: 'Emma Wilson',
-    phone: '+1 555-0321',
-    location: '321 Elm St, Eastside',
-    time: '18 min ago',
-    status: 'Canceled',
-  },
-  {
-    id: '#SOS-2025-005',
-    civilian: 'Robert Brown',
-    phone: '+1 555-0654',
-    location: '654 Cedar Blvd, Westside',
-    time: '25 min ago',
-    status: 'Pending',
-  },
-])
+const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
-const statusClass = (status) => {
-  switch (status) {
-    case 'Pending':
-      return 'bg-gray-100 text-gray-600'
-    case 'Assigned':
-      return 'bg-blue-100 text-blue-600'
-    case 'Completed':
-      return 'bg-green-100 text-green-600'
-    case 'Canceled':
-      return 'bg-red-100 text-red-600'
-    default:
-      return 'bg-gray-100 text-gray-600'
+const stats = ref({
+  active: 12,
+  pending: 8,
+  assigned: 15,
+  avilable: 0,
+})
+
+const lineChart = ref({
+  title: 'Emergencies',
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  data: [1586, 150, 496, 700, 654, 1235, 1111, 2036, 5398, 0, 0, 0],
+})
+const BieChart = ref({
+  title: 'Incident Types',
+  labels: ['Bombing', 'Heart Attack', 'Fire', 'Breaks'],
+  data: [1500, 90, 158, 387],
+})
+
+// const toast = useToast()
+const loading = ref(false)
+const counts = ref([])
+
+// Load initial data
+const loadData = async () => {
+  try {
+    loading.value = true
+    const countsResponse = await statisticsService.getCounts()
+    counts.value = countsResponse.data
+  } catch (error) {
+    console.error('Error loading data:', error)
+    errorAlert('Failed!', "We can't load data, Help your self with this fake data for now ;)")
+  } finally {
+    loading.value = false
   }
 }
+
+// Lifecycle
+onMounted(() => {
+  loadData()
+})
 </script>
