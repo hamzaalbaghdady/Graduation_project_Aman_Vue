@@ -24,7 +24,11 @@
       </thead>
 
       <tbody>
-        <tr v-for="(row, rowIndex) in paginatedData" :key="rowIndex" class="hover:bg-gray-50">
+        <tr
+          v-for="(row, rowIndex) in paginatedData"
+          :key="rowIndex"
+          class="hover:bg-gray-50 border-b"
+        >
           <!-- Data columns -->
           <td
             v-for="(header, colIndex) in headers"
@@ -32,7 +36,7 @@
             :class="
               header.toLowerCase() === 'status'
                 ? statusClass(row[header.toLowerCase()])
-                : 'px-4 py-2 text-sm text-gray-600 border-b'
+                : 'px-4 py-2 text-sm text-gray-600'
             "
           >
             {{ row[header.toLowerCase()] }}
@@ -41,7 +45,7 @@
           <!-- Dynamic actions column -->
           <td
             v-if="actions && actions.length"
-            class="px-4 py-2 text-sm text-gray-600 border-b flex gap-2"
+            class="px-4 py-2 text-sm text-gray-600 flex gap-2 align-middle text-center"
           >
             <template v-for="action in actions" :key="action">
               <router-link v-if="action === 'view'" :to="`${myRoute}/${row.id}`">

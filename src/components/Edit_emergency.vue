@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50 p-8">
+  <div v-if="loading" class="text-center h-full text-6xl p-5 relative"><Spinner /></div>
+  <div v-else class="min-h-screen bg-gray-50 p-8">
     <!-- Page Header -->
     <header class="flex justify-between items-center mb-6">
       <h1 class="text-xl font-bold text-gray-800">Edit Emergency</h1>
@@ -26,7 +27,7 @@
           <div>
             <label class="block text-sm font-medium text-gray-700">Caller ID</label>
             <input
-              v-model="form.id"
+              v-model="emergency.civilian_id"
               type="text"
               value=""
               placeholder="Enter caller id"
@@ -143,9 +144,18 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { ref, onMounted } from 'vue'
+import Spinner from '@/components/Spinner.vue'
+import { emergencyService } from '@/services'
+import { useAlert } from '@/composables/useAlert'
+import { useRoute } from 'vue-router'
 
-const form = reactive({
+const route = useRoute()
+const id = route.params.id
+
+const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
+
+const form = ref({
   name: 'Jhon Doo',
   id: '958324901',
   phone: '0599657001',
@@ -156,10 +166,37 @@ const form = reactive({
   incidentType: 'fire',
   notes: '...',
 })
+const emergency = ref([])
+const emergencyTypes = ref([])
 
 const handleSubmit = () => {
   console.log('Form submitted:', form)
   // TODO: send form data to Laravel API
   console.log('Submitted data: ', form)
 }
+
+const loading = ref(false)
+// Load initial data
+const loadData = async () => {
+  try {
+    loading.value = true
+    const [emergenciesResponse, emergencyTypesResponse] = await Promise.all([
+      emergencyService.getEmergency(id),
+      emergencyService.getEmergencyTypes(),
+    ])
+
+    emergency.value = emergenciesResponse.data
+    emergencyTypes.value = emergencyTypesResponse.data
+  } catch (error) {
+    console.error('Error loading data:', error)
+    errorAlert('Failed!', "We can't load data, Help your self with this fake data for now ;)")
+  } finally {
+    loading.value = false
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  loadData()
+})
 </script>
