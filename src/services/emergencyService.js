@@ -7,6 +7,12 @@ export const emergencyService = {
     return response.data
   },
 
+  // Get all emergencies
+  async getEmergencyTypes(params = {}) {
+    const response = await api.get('/emergencies/types', { params })
+    return response.data
+  },
+
   // Get emergency details
   async getEmergency(id) {
     const response = await api.get(`/emergencies/${id}`)

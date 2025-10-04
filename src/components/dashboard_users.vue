@@ -1,6 +1,7 @@
 <template>
   <!-- Dashboard Content -->
-  <main class="flex-1 p-6 overflow-y-auto">
+  <div v-if="loading" class="text-center h-full text-6xl p-5 relative"><Spinner /></div>
+  <main v-else class="flex-1 p-6 overflow-y-auto">
     <!-- Title -->
     <div class="pb-6 flex items-center justify-between">
       <div>
@@ -57,11 +58,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Table from '@/components/table.vue'
 import { useAlert } from '@/composables/useAlert'
 import Card from '@/components/Card.vue'
 import { useFileGenerator } from '@/composables/fileGenerator'
+import { statisticsService, userService } from '@/services'
+import Spinner from '@/components/Spinner.vue'
 
 const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
@@ -156,23 +159,14 @@ const users = ref([
   },
 ])
 
+// Statistics
 const stats = ref({
   total: 11568,
   mobile_users: 1578,
   blocked: 180,
 })
-const statusClass = (status) => {
-  switch (status) {
-    case 'Active':
-      return 'bg-green-100 text-gray-600'
-    case 'Blocked':
-      return 'bg-red-100 text-blue-600'
 
-    default:
-      return 'bg-gray-100 text-gray-600'
-  }
-}
-
+// Handel user bloking
 function handleBlock(row) {
   confirmDialog(
     'Are you sure you want to block member #' + row.id + '?',
@@ -188,7 +182,7 @@ function handleBlock(row) {
     }
   })
 }
-
+// File exportation
 const { exportToExcel, exportJsonToExcel, exportToCSV } = useFileGenerator()
 const downloadExcel = () => {
   // Convert to plain JS array of objects (deep clone)
@@ -198,4 +192,32 @@ const downloadExcel = () => {
     .then(() => console.log('Excel exported'))
     .catch((err) => console.error(err))
 }
+
+// load data from api
+
+const loading = ref(false)
+const counts = ref([])
+
+// Load initial data
+const loadData = async () => {
+  try {
+    loading.value = true
+    const [userResponse, countsResponse] = await Promise.all([
+      userService.getUsers(),
+      statisticsService.getCounts(),
+    ])
+    users.value = usersResponse.data
+    counts.value = countsResponse.data
+  } catch (error) {
+    console.error('Error loading data:', error)
+    errorAlert('Failed!', "We can't load data, Help your self with this fake data for now ;)")
+  } finally {
+    loading.value = false
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  loadData()
+})
 </script>

@@ -1,6 +1,7 @@
 <template>
   <!-- Dashboard Content -->
-  <main class="flex-1 p-6 overflow-y-auto">
+  <div v-if="loading" class="text-center h-full text-6xl p-5 relative"><Spinner /></div>
+  <main v-else class="flex-1 p-6 overflow-y-auto">
     <!-- Title -->
     <div class="pb-6 flex items-center justify-between">
       <div>
@@ -53,7 +54,7 @@
       </div>
       <Table
         :headers="['ID', 'Driver', 'Crew_size', 'Location', 'status']"
-        :data="amblunces"
+        :data="ambulances"
         :actions="['view', 'edit', 'delete']"
         :perPage="3"
         @delete="handleDelete"
@@ -63,15 +64,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Table from '@/components/table.vue'
 import { useAlert } from '@/composables/useAlert'
 import Card from '@/components/Card.vue'
 import { useFileGenerator } from '@/composables/fileGenerator'
+import { statisticsService, ambulanceService } from '@/services'
+import Spinner from '@/components/Spinner.vue'
 
 const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
-const amblunces = ref([
+const ambulances = ref([
   {
     id: 'A202536985',
     driver: 'John Smith',
@@ -134,10 +137,38 @@ function handleDelete(row) {
 const { exportToExcel, exportJsonToExcel, exportToCSV } = useFileGenerator()
 const downloadExcel = () => {
   // Convert to plain JS array of objects (deep clone)
-  const plainData = amblunces.value.map((e) => ({ ...e }))
+  const plainData = ambulances.value.map((e) => ({ ...e }))
 
-  exportToExcel(plainData, 'amblunces', 'amblunces', null, true)
+  exportToExcel(plainData, 'ambulances', 'ambulances', null, true)
     .then(() => console.log('Excel exported'))
     .catch((err) => console.error(err))
 }
+
+// load data from api
+
+const loading = ref(false)
+const counts = ref([])
+
+// Load initial data
+const loadData = async () => {
+  try {
+    loading.value = true
+    const [ambulanceResponse, countsResponse] = await Promise.all([
+      ambulanceService.getAmbulances(),
+      statisticsService.getCounts(),
+    ])
+    ambulances.value = ambulancesResponse.data
+    counts.value = countsResponse.data
+  } catch (error) {
+    console.error('Error loading data:', error)
+    errorAlert('Failed!', "We can't load data, Help your self with this fake data for now ;)")
+  } finally {
+    loading.value = false
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  loadData()
+})
 </script>
