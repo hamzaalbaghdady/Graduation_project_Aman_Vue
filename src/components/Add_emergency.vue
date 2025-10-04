@@ -38,6 +38,7 @@
             <label class="block text-sm font-medium text-gray-700">Caller Phone Number</label>
             <input
               v-model="form.phone"
+              required
               type="tel"
               placeholder="+1 (555) 123-4567"
               class="mt-1 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -50,24 +51,28 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">Location Information</label>
           <div class="grid grid-cols-4 gap-4">
             <input
+              required
               v-model="form.city"
               type="text"
               placeholder="Enter city"
               class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
             <input
+              required
               v-model="form.neighborhood"
               type="text"
               placeholder="Enter neighborhood"
               class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
             <input
+              required
               v-model="form.street"
               type="text"
               placeholder="Enter street address"
               class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
             />
             <input
+              required
               v-model="form.house_name"
               type="text"
               placeholder="Enter house name"
@@ -82,6 +87,7 @@
           <label class="block text-sm font-medium text-gray-700">Incident Type</label>
           <select
             v-model="form.incidentType"
+            required
             class="mt-1 w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="">Select incident type</option>
@@ -140,6 +146,10 @@
 
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
+import { useAlert } from '@/composables/useAlert'
+import { emergencyService } from '@/services'
+
+const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
 
 const currentDateTime = ref('')
 onMounted(() => {
@@ -159,9 +169,21 @@ const form = reactive({
   notes: '',
 })
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   console.log('Form submitted:', form)
-  // TODO: send form data to Laravel API
-  console.log('Submitted data: ', form)
+  try {
+    const update = await emergencyService.createEmergency(form.value)
+    console.log('API data: ', update)
+
+    // Accessing inside data.server
+    if (update.status) {
+      successAlert('Created Successfully!', update.message)
+    } else {
+      errorAlert('Failed!', update.message)
+    }
+  } catch (error) {
+    console.error('Error loading data:', error)
+    errorAlert('Failed!', "We can't load data, Help your self with this fake data for now ;)")
+  }
 }
 </script>

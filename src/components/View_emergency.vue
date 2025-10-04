@@ -1,5 +1,6 @@
 <template>
-  <div class="p-6 bg-gray-50 min-h-screen">
+  <div v-if="loading" class="text-center h-full text-6xl p-5 relative"><Spinner /></div>
+  <div v-else class="p-6 bg-gray-50 min-h-screen">
     <div class="pb-6 flex items-center justify-between">
       <!-- Page Title -->
       <h2 class="text-xl font-semibold text-gray-800 mb-4">

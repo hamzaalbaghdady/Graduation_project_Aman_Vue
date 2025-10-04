@@ -169,9 +169,16 @@ const form = ref({
 const emergency = ref([])
 const emergencyTypes = ref([])
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   console.log('Form submitted:', form)
-  // TODO: send form data to Laravel API
+  try {
+    const update = await emergencyService.updateEmergency(id, form.value)
+    if (update.status) successAlert('Updated Successfully!', update.message)
+    else errorAlert('Failed!', update.message)
+  } catch (error) {
+    console.error('Error loading data:', error)
+    errorAlert('Failed!', "We can't load data, Help your self with this fake data for now ;)")
+  }
   console.log('Submitted data: ', form)
 }
 
