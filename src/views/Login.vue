@@ -65,21 +65,38 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import logo from '@/assets/images/fav.png'
+import authService from '@/services'
+import { useAlert } from '@/composables/useAlert'
+
+const { confirmDialog, successAlert, errorAlert, infoAlert } = useAlert()
+
 const form = reactive({
   id: '',
   password: '',
 })
 const status = ref(null)
 
-const handleLogin = () => {
-  // TODO: send API request to Laravel backend
-  if (form.password === 'password' && form.id === '123456789') {
-    status.value = true
-    window.location.href = '../'
-  } else {
-    status.value = false
+// Loading state
+const loading = ref(false)
+
+// Login handler
+const handleLogin = async () => {
+  loading.value = true
+
+  try {
+    const result = await authService.login(form)
+
+    if (result.status) {
+      // Successful login - redirect to home
+      window.location.href = '../'
+    } else {
+      errorAlert('Login failed', result.message)
+    }
+  } catch (error) {
+    errorAlert('An error occurred during login')
+    console.error('Login error:', error)
+  } finally {
+    loading.value = false
   }
-  console.log('Login submitted:', form)
-  console.log(status.value)
 }
 </script>

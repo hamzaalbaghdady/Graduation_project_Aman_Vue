@@ -172,14 +172,14 @@ const form = reactive({
 const handleSubmit = async () => {
   console.log('Form submitted:', form)
   try {
-    const update = await emergencyService.createEmergency(form.value)
-    console.log('API data: ', update)
+    const create = await emergencyService.createEmergency(form.value)
+    console.log('API data: ', create)
 
     // Accessing inside data.server
-    if (update.status) {
-      successAlert('Created Successfully!', update.message)
+    if (create.status) {
+      successAlert('Created Successfully!', create.message)
     } else {
-      errorAlert('Failed!', update.message)
+      errorAlert('Failed!', create.message)
     }
   } catch (error) {
     console.error('Error loading data:', error)
